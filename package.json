@@ -27,6 +27,7 @@
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.17.0",
 		"globals": "^17.4.0",
+		"openapi-typescript": "^7.13.0",
 		"prettier": "^3.8.1",
 		"prettier-plugin-svelte": "^3.5.1",
 		"svelte": "^5.55.2",
@@ -45,6 +46,7 @@
 		"@schedule-x/events-service": "^4.6.0",
 		"@schedule-x/svelte": "^3.0.0",
 		"@schedule-x/theme-default": "^4.6.0",
+		"openapi-fetch": "^0.17.0",
 		"preact": "^10.29.2",
 		"temporal-polyfill": "^0.3.2"
 	}

@@ -19,6 +19,11 @@
 	const stopRecognition = () => {
 		if (!recognition || !listening) return;
 		recognition.stop();
+		if (transcript) {
+			// TODO: 将transcript发送至后端并等待识别(api/event.ts)
+			// TODO: 将识别到的内容传递到上层
+		}
+		status = '识别已结束';
 	};
 
 	onMount(() => {
@@ -43,7 +48,7 @@
 
 		recognition.onend = () => {
 			listening = false;
-			status = transcript ? '识别已结束。' : '等待开始。';
+			status = transcript ? '思考中...' : '等待开始。';
 		};
 
 		recognition.onerror = (event) => {
@@ -76,7 +81,7 @@
 	});
 </script>
 
-<main class="min-h-screen px-5 py-10 text-zinc-950">
+<main class="px-5 py-10 text-zinc-950">
 	<section class="flex flex-col gap-6">
 		<div>
 			<p class="text-sm text-zinc-500">SpeechRecognition POC</p>
