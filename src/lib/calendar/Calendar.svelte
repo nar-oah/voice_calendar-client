@@ -1,14 +1,20 @@
 <script lang="ts">
 	import { ScheduleXCalendar } from '@schedule-x/svelte';
-	import { CalendarApp, createCalendar, createViewDay } from '@schedule-x/calendar';
+	import { createCalendar, createViewDay } from '@schedule-x/calendar';
+	import type { CalendarApp, CalendarEventExternal } from '@schedule-x/calendar';
 	import '@schedule-x/theme-default/dist/index.css';
 	import 'temporal-polyfill/global';
 	import { onMount } from 'svelte';
 	import { createCurrentTimePlugin } from '@schedule-x/current-time';
+	import { createEventsServicePlugin } from '@schedule-x/events-service';
 	import Header from '$lib/calendar/Header.svelte';
 	import WeekGridDate from '$lib/calendar/WeekGridDate.svelte';
 
 	let calendarApp = $state<CalendarApp>();
+	const eventsService = createEventsServicePlugin();
+	export function addEvent(event: CalendarEventExternal) {
+		eventsService.add(event);
+	}
 	onMount(() => {
 		calendarApp = createCalendar({
 			locale: 'zh-CN',
@@ -22,27 +28,7 @@
 					minute: '2-digit'
 				}
 			},
-			events: [
-				{
-					id: '1',
-					title: 'Event 1',
-					start: Temporal.PlainDate.from('2024-07-06'),
-					end: Temporal.PlainDate.from('2024-07-06')
-				},
-				{
-					id: '2',
-					title: 'Event 2',
-					start: Temporal.ZonedDateTime.from('2024-07-06T02:00:00+09:00[Asia/Tokyo]'),
-					end: Temporal.ZonedDateTime.from('2024-07-06T04:00:00+09:00[Asia/Tokyo]')
-				},
-				{
-					id: '3',
-					title: 'Event 3',
-					start: Temporal.ZonedDateTime.from('2026-05-29T13:30:00+08:00[Asia/Shanghai]'),
-					end: Temporal.ZonedDateTime.from('2026-05-29T14:30:00+08:00[Asia/Shanghai]')
-				}
-			],
-			plugins: [createCurrentTimePlugin()]
+			plugins: [createCurrentTimePlugin(), eventsService]
 		});
 	});
 </script>

@@ -22,22 +22,14 @@
 		recognition.start();
 	};
 
-	const stopRecognition = () => {
+	const stopRecognition = async () => {
 		if (!recognition || !listening) return;
 		recognition.stop();
 		if (transcript) {
-			void getEvent(transcript)
-				.then((data) => {
-					if (data) {
-						onEventRecognized?.(data);
-						status = '识别完成，请确认日程。';
-					} else {
-						status = '识别失败，请重试。';
-					}
-				})
-				.catch(() => {
-					status = '识别失败，请重试。';
-				});
+			const data = await getEvent(transcript);
+			if (data != undefined) {
+				onEventRecognized?.(data);
+			}
 		}
 		status = '识别已结束';
 	};
