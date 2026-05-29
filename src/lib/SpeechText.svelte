@@ -1,5 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { getEvent } from '$lib/api/event';
+	import type { components } from '$lib/api/schema';
+
+	let {
+		onEventRecognized
+	}: { onEventRecognized?: (data: components['schemas']['Event']) => void } = $props();
 
 	let supported = $state(false);
 	let listening = $state(false);
@@ -22,6 +28,18 @@
 		if (transcript) {
 			// TODO: 将transcript发送至后端并等待识别(api/event.ts)
 			// TODO: 将识别到的内容传递到上层
+			void getEvent(transcript)
+				.then((data) => {
+					if (data) {
+						onEventRecognized?.(data);
+						status = '识别完成，请确认日程。';
+					} else {
+						status = '识别失败，请重试。';
+					}
+				})
+				.catch(() => {
+					status = '识别失败，请重试。';
+				});
 		}
 		status = '识别已结束';
 	};
