@@ -6,12 +6,10 @@
 	let transcript = $state('');
 	let interimTranscript = $state('');
 	let status = $state('正在检测浏览器支持...');
-
 	let recognition: SpeechRecognition | null = null;
 
 	const startRecognition = () => {
 		if (!recognition || listening) return;
-
 		transcript = '';
 		interimTranscript = '';
 		status = '正在聆听...';
@@ -20,13 +18,11 @@
 
 	const stopRecognition = () => {
 		if (!recognition || !listening) return;
-
 		recognition.stop();
 	};
 
 	onMount(() => {
 		const SpeechRecognitionConstructor = window.SpeechRecognition || window.webkitSpeechRecognition;
-
 		if (!SpeechRecognitionConstructor) {
 			status = '当前浏览器不支持 SpeechRecognition。';
 			return;
@@ -80,13 +76,8 @@
 	});
 </script>
 
-<svelte:head>
-	<title>语音转文本验证</title>
-	<meta name="description" content="使用浏览器 SpeechRecognition API 进行语音转文本可行性验证" />
-</svelte:head>
-
-<main class="min-h-screen bg-zinc-50 px-5 py-10 text-zinc-950">
-	<section class="mx-auto flex max-w-2xl flex-col gap-6">
+<main class="min-h-screen px-5 py-10 text-zinc-950">
+	<section class="flex flex-col gap-6">
 		<div>
 			<p class="text-sm text-zinc-500">SpeechRecognition POC</p>
 			<h1 class="mt-2 text-3xl font-semibold">语音转文本验证</h1>
