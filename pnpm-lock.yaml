@@ -29,6 +29,9 @@ importers:
       '@schedule-x/theme-default':
         specifier: ^4.6.0
         version: 4.6.0
+      '@schedule-x/theme-shadcn':
+        specifier: ^4.6.0
+        version: 4.6.0
       openapi-fetch:
         specifier: ^0.17.0
         version: 0.17.0
@@ -880,6 +883,9 @@ packages:
 
   '@schedule-x/theme-default@4.6.0':
     resolution: {integrity: sha512-SM3bcvROJeG7ScH14lBIHZSTOBTR8h+oTswbpx1gpscddUfQfAnu7cFW4OJJI+ii+Si1IdTd4T3+rrnKd4HDDg==}
+
+  '@schedule-x/theme-shadcn@4.6.0':
+    resolution: {integrity: sha512-MwEBne7fPeN88Xa1mXxPQFkVIqs7Xi0zWMIHyppCgrPncfhDt1Gid4I7GqjsB3SnOyHWLbb5sL5Ab2ZaQesgtQ==}
 
   '@sindresorhus/is@7.2.0':
     resolution: {integrity: sha512-P1Cz1dWaFfR4IR+U13mqqiGsLFf1KbayybWwdd2vfctdV6hDpUkgCY0nKOLLTMSoRd/jJNjtbqzf13K8DCCXQw==}
@@ -2544,6 +2550,8 @@ snapshots:
       svelte: 5.55.10(@typescript-eslint/types@8.60.0)
 
   '@schedule-x/theme-default@4.6.0': {}
+
+  '@schedule-x/theme-shadcn@4.6.0': {}
 
   '@sindresorhus/is@7.2.0': {}
 

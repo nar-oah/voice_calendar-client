@@ -46,6 +46,7 @@
 		"@schedule-x/events-service": "^4.6.0",
 		"@schedule-x/svelte": "^3.0.0",
 		"@schedule-x/theme-default": "^4.6.0",
+		"@schedule-x/theme-shadcn": "^4.6.0",
 		"openapi-fetch": "^0.17.0",
 		"preact": "^10.29.2",
 		"temporal-polyfill": "^0.3.2"
