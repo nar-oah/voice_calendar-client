@@ -26,8 +26,6 @@
 		if (!recognition || !listening) return;
 		recognition.stop();
 		if (transcript) {
-			// TODO: 将transcript发送至后端并等待识别(api/event.ts)
-			// TODO: 将识别到的内容传递到上层
 			void getEvent(transcript)
 				.then((data) => {
 					if (data) {
