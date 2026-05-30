@@ -14,13 +14,13 @@
 		data,
 		onCreate,
 		onDelete,
-		onUpdate,
+		onRead,
 		onCancel
 	}: {
 		data: ScheduleEvent;
 		onCreate?: (data: ScheduleEvent) => void;
-		onDelete?: (data: ScheduleEvent) => void;
-		onUpdate?: (data: ScheduleEvent) => void;
+		onDelete?: (id: number) => void;
+		onRead?: (time: ScheduleTime) => void;
 		onCancel?: () => void;
 	} = $props();
 
@@ -92,8 +92,8 @@
 		submitEvent.preventDefault();
 		const scheduleEvent = normalizeEvent();
 		if (scheduleEvent.action === 'create') onCreate?.(scheduleEvent);
-		if (scheduleEvent.action === 'delete') onDelete?.(scheduleEvent);
-		if (scheduleEvent.action === 'read') onUpdate?.(scheduleEvent);
+		if (scheduleEvent.action === 'delete') onDelete?.(scheduleEvent.id);
+		if (scheduleEvent.action === 'read') onRead?.(scheduleEvent.start);
 	};
 </script>
 

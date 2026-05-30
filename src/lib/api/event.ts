@@ -47,3 +47,13 @@ export async function addEvents(token: string, event: Event): Promise<StoredEven
 		return data;
 	}
 }
+export async function delEvents(token: string, id: number): Promise<void> {
+	await api.POST('/del', {
+		params: {
+			query: {
+				token,
+				id
+			}
+		}
+	});
+}

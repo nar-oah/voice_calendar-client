@@ -5,9 +5,10 @@
 	import TokenSync from '$lib/sync/TokenSync.svelte';
 	import type { components } from '$lib/api/schema';
 	import type { CalendarEventExternal } from '@schedule-x/calendar';
-	import { addEvents } from '$lib/api/event';
+	import { addEvents, delEvents } from '$lib/api/event';
 
 	type Event = components['schemas']['Event'];
+	type Time = components['schemas']['Time'];
 	type StoredEvent = components['schemas']['StoredEvent'];
 	let pendingEvent = $state<Event | null>(null);
 	let calendar = $state<Calendar>();
@@ -27,10 +28,24 @@
 			location: data.location ? data.location : undefined
 		};
 	}
-	async function handleConfirm(event: Event): Promise<void> {
+	async function handleCreate(event: Event): Promise<void> {
 		const data = await addEvents(token, event);
-		console.log(data);
 		if (data) calendar?.addEvent(getCalendarEvent(data));
+		pendingEvent = null;
+	}
+	async function handleDelete(id: number): Promise<void> {
+		calendar?.delEvent(id);
+		await delEvents(token, id);
+		pendingEvent = null;
+	}
+	function handleRead(time: Time): void {
+		function get_zdt(t: Time): Temporal.ZonedDateTime {
+			const pad = (value: number): string => String(value).padStart(2, '0');
+			const value = `${t.year}-${pad(t.month)}-${pad(t.day)}T${pad(t.hour)}:${pad(t.minute)}:${pad(t.second)}`;
+			const zone = '+08:00[Asia/Shanghai]';
+			return Temporal.ZonedDateTime.from(value + zone);
+		}
+		calendar?.readEvent(get_zdt(time));
 		pendingEvent = null;
 	}
 	function handleEventsSynced(data: StoredEvent[]): void {
@@ -52,8 +67,8 @@
 	<ScheduleConfirm
 		data={pendingEvent}
 		onCancel={() => (pendingEvent = null)}
-		onCreate={(data) => handleConfirm(data)}
-		onDelete={() => {}}
-		onUpdate={() => {}}
+		onCreate={(data) => handleCreate(data)}
+		onDelete={handleDelete}
+		onRead={handleRead}
 	/>
 {/if}
