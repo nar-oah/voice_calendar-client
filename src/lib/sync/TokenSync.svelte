@@ -47,16 +47,16 @@
 	});
 </script>
 
-<div class="flex gap-3">
+<div class="ml-5 flex w-3/5 gap-2">
 	<input
-		class="min-w-0 flex-1 rounded-md border border-zinc-300 px-3 py-2 text-zinc-950 placeholder:text-zinc-400"
+		class="min-w-0 flex-1 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-950 shadow-sm outline-none transition placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-2 focus:ring-zinc-200"
 		type="text"
 		placeholder="输入token以同步"
 		bind:value={token}
 	/>
 	<button
 		type="button"
-		class="rounded-md bg-zinc-950 px-4 py-2 text-sm font-medium whitespace-nowrap text-white hover:bg-zinc-800 disabled:cursor-not-allowed disabled:bg-zinc-400"
+		class="rounded-lg bg-zinc-950 px-4 py-2 text-sm font-medium whitespace-nowrap text-white shadow-sm transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:bg-zinc-400"
 		disabled={loading}
 		onclick={handleClick}
 	>
