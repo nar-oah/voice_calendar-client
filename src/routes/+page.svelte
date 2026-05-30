@@ -2,7 +2,7 @@
 	import Calendar from '$lib/calendar/Calendar.svelte';
 	import ScheduleConfirm from '$lib/ScheduleConfirm.svelte';
 	import SpeechText from '$lib/speech-text/SpeechText.svelte';
-	import TokenSync from '$lib/speech-text/TokenSync.svelte';
+	import TokenSync from '$lib/sync/TokenSync.svelte';
 	import type { components } from '$lib/api/schema';
 	import type { CalendarEventExternal } from '@schedule-x/calendar';
 
