@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Calendar from '$lib/calendar/Calendar.svelte';
 	import ScheduleConfirm from '$lib/ScheduleConfirm.svelte';
-	import SpeechText from '$lib/SpeechText.svelte';
+	import SpeechText from '$lib/speech-text/SpeechText.svelte';
 	import type { components } from '$lib/api/schema';
 	import type { CalendarEventExternal } from '@schedule-x/calendar';
 
