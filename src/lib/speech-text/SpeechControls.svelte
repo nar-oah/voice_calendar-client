@@ -16,7 +16,7 @@
 	} = $props();
 </script>
 
-<div class="rounded-lg b-solid b-3 b-black bg-white p-5">
+<div class="rounded-lg b-solid b-3 b-black bg-red p-5">
 	<div class="flex flex-wrap items-center gap-3">
 		<button
 			type="button"
@@ -28,12 +28,12 @@
 		</button>
 		<button
 			type="button"
-			class="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-900 disabled:cursor-not-allowed disabled:text-zinc-300"
+			class="rounded-md b-solid b-3 b-black px-4 py-2 text-sm font-medium text-zinc-900 disabled:cursor-not-allowed disabled:text-zinc-300"
 			disabled={creating}
 			onclick={onCreate}
 		>
 			新建日程
 		</button>
-		<span class="text-sm text-zinc-500">{status}</span>
+		<span class="text-sm text-black">{status}</span>
 	</div>
 </div>

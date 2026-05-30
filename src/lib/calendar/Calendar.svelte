@@ -51,4 +51,10 @@
 	:global(.sx__week-header) {
 		display: none;
 	}
+	:global(.sx__today-button),
+	:global(.sx__date-input) {
+		border: none !important;
+		box-shadow: none !important;
+		outline: none !important;
+	}
 </style>
