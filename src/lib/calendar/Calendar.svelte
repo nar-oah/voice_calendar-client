@@ -18,12 +18,6 @@
 	export function addEvent(event: CalendarEventExternal) {
 		eventsService.add(event);
 	}
-	export function updateEvent(event: CalendarEventExternal) {
-		if (eventsService.get(event.id)) eventsService.update(event);
-	}
-	export function removeEvent(id: CalendarEventExternal['id']) {
-		if (eventsService.get(id)) eventsService.remove(id);
-	}
 
 	onMount(() => {
 		calendarApp = createCalendar({
