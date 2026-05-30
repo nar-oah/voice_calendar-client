@@ -14,15 +14,13 @@
 	} = $props();
 
 	const tokenStorageKey = 'voice_calendar_token';
-	let storedToken = $state('');
 	let loading = $state(false);
 
-	const currentToken = () => token.trim() || storedToken.trim();
-	const buttonText = () => (currentToken() ? '同步' : '获取token');
+	const currentToken = () => token.trim();
+	const buttonText = () => (token.trim() ? '同步' : '获取token');
 
 	const saveToken = (value: string) => {
 		token = value;
-		storedToken = value;
 		localStorage.setItem(tokenStorageKey, value);
 	};
 
@@ -38,14 +36,14 @@
 		}
 
 		const value = currentToken();
+		saveToken(value);
 		const data = await getEvents(value);
 		if (data !== undefined) onEventsSynced?.(data);
 		loading = false;
 	};
 
 	onMount(() => {
-		storedToken = localStorage.getItem(tokenStorageKey) ?? '';
-		if (!token && storedToken) token = storedToken;
+		if (!token) token = localStorage.getItem(tokenStorageKey) ?? '';
 	});
 </script>
 
