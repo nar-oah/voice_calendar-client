@@ -12,7 +12,7 @@
 	<label for="speech-transcript" class="text-base font-medium">识别结果</label>
 	<textarea
 		id="speech-transcript"
-		class={`mt-4 min-h-36 w-full resize-y rounded-md border border-zinc-300 px-3 py-2 text-lg leading-8 outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 ${readonly ? 'cursor-not-allowed bg-zinc-50 text-zinc-500' : 'bg-white text-zinc-950'}`}
+		class={`mt-4 block min-h-36 w-full box-border resize-y border-0 bg-transparent p-0 text-lg leading-8 outline-none ${readonly ? 'cursor-not-allowed text-zinc-500' : 'text-zinc-950'}`}
 		placeholder="暂无内容"
 		rows="5"
 		{readonly}
