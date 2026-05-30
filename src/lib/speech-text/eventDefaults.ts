@@ -18,6 +18,7 @@ export const getEmptyEvent = (): ScheduleEvent => {
 	const now = getCurrentTime();
 	return {
 		action: 'create',
+		id: 0,
 		title: '十分钟后提醒我喝水',
 		start: now,
 		end: { ...now, minute: now.minute + 5 },

@@ -32,7 +32,7 @@
 			disabled={creating}
 			onclick={onCreate}
 		>
-			新建日程
+			识别日程
 		</button>
 		<span class="text-sm text-black">{status}</span>
 	</div>

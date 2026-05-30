@@ -27,13 +27,13 @@
 	const actionText = {
 		create: '新建',
 		delete: '删除',
-		read: '更新'
+		read: '查看'
 	} satisfies Record<ScheduleEvent['action'], string>;
 
 	const confirmText = {
 		create: '确认创建',
 		delete: '确认删除',
-		read: '确认修改'
+		read: '跳转日期'
 	} satisfies Record<ScheduleEvent['action'], string>;
 
 	const actionBadgeClass = {
@@ -148,7 +148,7 @@
 						>
 							<option value="create">新建</option>
 							<option value="delete">删除</option>
-							<option value="update">更新</option>
+							<option value="update">查看</option>
 						</select>
 					</label>
 
