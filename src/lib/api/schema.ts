@@ -102,8 +102,11 @@ export interface components {
         Event: {
             /** @description 用户想执行的日程操作 */
             action: components["schemas"]["Action"];
-            /** Id */
-            id?: number | null;
+            /**
+             * Id
+             * @default 0
+             */
+            id: number;
             /**
              * Title
              * @description The title of the event.

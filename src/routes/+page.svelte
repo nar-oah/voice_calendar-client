@@ -35,8 +35,8 @@
 	}
 	async function handleDelete(id: number): Promise<void> {
 		calendar?.delEvent(id);
-		await delEvents(token, id);
 		pendingEvent = null;
+		await delEvents(token, id);
 	}
 	function handleRead(time: Time): void {
 		function get_pd(t: Time): Temporal.PlainDate {

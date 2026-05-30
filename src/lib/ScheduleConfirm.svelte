@@ -53,6 +53,7 @@
 		`${time.year}-${pad(time.month)}-${pad(time.day)} ${pad(time.hour)}:${pad(time.minute)}:${pad(time.second)}`;
 	const copyTime = (time: ScheduleTime): ScheduleTime => ({ ...time });
 	const copyEvent = (event: ScheduleEvent): EditableEvent => ({
+		id: event.id,
 		action: event.action,
 		title: event.title,
 		start: copyTime(event.start),
@@ -65,6 +66,7 @@
 		return text ? text : null;
 	};
 	const normalizeEvent = (): ScheduleEvent => ({
+		id: draft.id,
 		action: draft.action,
 		title: draft.title.trim(),
 		start: copyTime(draft.start),
@@ -74,6 +76,7 @@
 	});
 
 	let draft = $state<EditableEvent>({
+		id: 0,
 		action: 'create',
 		title: '',
 		start: { year: 0, month: 1, day: 1, hour: 0, minute: 0, second: 0 },
