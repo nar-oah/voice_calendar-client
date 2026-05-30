@@ -6,8 +6,10 @@
 	import SpeechHeader from '$lib/speech-text/SpeechHeader.svelte';
 	import TranscriptInput from '$lib/speech-text/TranscriptInput.svelte';
 
-	let { onEventRecognized }: { onEventRecognized?: (data: ScheduleEvent) => void } = $props();
-
+	let {
+		token,
+		onEventRecognized
+	}: { token: string; onEventRecognized?: (data: ScheduleEvent) => void } = $props();
 	let supported = $state(false);
 	let listening = $state(false);
 	let transcript = $state('');
@@ -28,7 +30,7 @@
 		}
 
 		status = '思考中...';
-		const data = await getEvent(text);
+		const data = await getEvent(token, text);
 		if (data != undefined) {
 			onEventRecognized?.(data);
 		}

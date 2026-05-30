@@ -40,7 +40,7 @@
 
 <main class="flex w-full gap-8">
 	<section class="flex flex-1 flex-col gap-4">
-		<SpeechText onEventRecognized={(data) => (pendingEvent = data)} />
+		<SpeechText {token} onEventRecognized={(data) => (pendingEvent = data)} />
 		<TokenSync bind:token onEventsSynced={handleEventsSynced} />
 	</section>
 	<section class="flex-1">
