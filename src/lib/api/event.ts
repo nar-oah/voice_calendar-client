@@ -9,15 +9,16 @@ export async function getToken(): Promise<string | undefined> {
 		return data;
 	}
 }
-export async function getEvent(text: string): Promise<Event | undefined> {
-	const { data, error } = await api.POST('/event', {
+export async function getEvent(token: string, text: string): Promise<Event | undefined> {
+	const { data, error } = await api.POST('/parser', {
 		params: {
 			query: {
+				token,
 				text
 			}
 		}
 	});
-	if (!error) {
+	if (!error && data) {
 		return data;
 	}
 }
@@ -32,4 +33,27 @@ export async function getEvents(token: string): Promise<StoredEvent[] | undefine
 	if (!error) {
 		return data;
 	}
+}
+export async function addEvents(token: string, event: Event): Promise<StoredEvent | undefined> {
+	const { data, error } = await api.POST('/add', {
+		params: {
+			query: {
+				token
+			}
+		},
+		body: event
+	});
+	if (!error && data) {
+		return data;
+	}
+}
+export async function delEvents(token: string, id: number): Promise<void> {
+	await api.POST('/del', {
+		params: {
+			query: {
+				token,
+				id
+			}
+		}
+	});
 }

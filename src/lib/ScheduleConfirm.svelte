@@ -14,38 +14,38 @@
 		data,
 		onCreate,
 		onDelete,
-		onUpdate,
+		onRead,
 		onCancel
 	}: {
 		data: ScheduleEvent;
 		onCreate?: (data: ScheduleEvent) => void;
-		onDelete?: (data: ScheduleEvent) => void;
-		onUpdate?: (data: ScheduleEvent) => void;
+		onDelete?: (id: number) => void;
+		onRead?: (time: ScheduleTime) => void;
 		onCancel?: () => void;
 	} = $props();
 
 	const actionText = {
 		create: '新建',
 		delete: '删除',
-		update: '更新'
+		read: '查看'
 	} satisfies Record<ScheduleEvent['action'], string>;
 
 	const confirmText = {
 		create: '确认创建',
 		delete: '确认删除',
-		update: '确认修改'
+		read: '跳转日期'
 	} satisfies Record<ScheduleEvent['action'], string>;
 
 	const actionBadgeClass = {
 		create: 'bg-zinc-950 text-white',
 		delete: 'bg-red-600 text-white',
-		update: 'bg-amber-500 text-zinc-950'
+		read: 'bg-amber-500 text-zinc-950'
 	} satisfies Record<ScheduleEvent['action'], string>;
 
 	const confirmButtonClass = {
 		create: 'bg-zinc-950 text-white hover:bg-zinc-800',
 		delete: 'bg-red-600 text-white hover:bg-red-700',
-		update: 'bg-amber-500 text-zinc-950 hover:bg-amber-400'
+		read: 'bg-amber-500 text-zinc-950 hover:bg-amber-400'
 	} satisfies Record<ScheduleEvent['action'], string>;
 
 	const pad = (value: number) => String(value).padStart(2, '0');
@@ -53,6 +53,7 @@
 		`${time.year}-${pad(time.month)}-${pad(time.day)} ${pad(time.hour)}:${pad(time.minute)}:${pad(time.second)}`;
 	const copyTime = (time: ScheduleTime): ScheduleTime => ({ ...time });
 	const copyEvent = (event: ScheduleEvent): EditableEvent => ({
+		id: event.id,
 		action: event.action,
 		title: event.title,
 		start: copyTime(event.start),
@@ -65,6 +66,7 @@
 		return text ? text : null;
 	};
 	const normalizeEvent = (): ScheduleEvent => ({
+		id: draft.id,
 		action: draft.action,
 		title: draft.title.trim(),
 		start: copyTime(draft.start),
@@ -74,6 +76,7 @@
 	});
 
 	let draft = $state<EditableEvent>({
+		id: 0,
 		action: 'create',
 		title: '',
 		start: { year: 0, month: 1, day: 1, hour: 0, minute: 0, second: 0 },
@@ -92,8 +95,8 @@
 		submitEvent.preventDefault();
 		const scheduleEvent = normalizeEvent();
 		if (scheduleEvent.action === 'create') onCreate?.(scheduleEvent);
-		if (scheduleEvent.action === 'delete') onDelete?.(scheduleEvent);
-		if (scheduleEvent.action === 'update') onUpdate?.(scheduleEvent);
+		if (scheduleEvent.action === 'delete') onDelete?.(scheduleEvent.id);
+		if (scheduleEvent.action === 'read') onRead?.(scheduleEvent.start);
 	};
 </script>
 
@@ -145,7 +148,7 @@
 						>
 							<option value="create">新建</option>
 							<option value="delete">删除</option>
-							<option value="update">更新</option>
+							<option value="update">查看</option>
 						</select>
 					</label>
 

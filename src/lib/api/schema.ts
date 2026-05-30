@@ -38,7 +38,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/event": {
+    "/parser": {
         parameters: {
             query?: never;
             header?: never;
@@ -48,7 +48,41 @@ export interface paths {
         get?: never;
         put?: never;
         /** Get Events */
-        post: operations["get_events_event_post"];
+        post: operations["get_events_parser_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/add": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Add Event */
+        post: operations["add_event_add_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/del": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Del Event */
+        post: operations["del_event_del_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -68,6 +102,11 @@ export interface components {
         Event: {
             /** @description 用户想执行的日程操作 */
             action: components["schemas"]["Action"];
+            /**
+             * Id
+             * @default 0
+             */
+            id: number;
             /**
              * Title
              * @description The title of the event.
@@ -205,9 +244,10 @@ export interface operations {
             };
         };
     };
-    get_events_event_post: {
+    get_events_parser_post: {
         parameters: {
             query: {
+                token: string;
                 text: string;
             };
             header?: never;
@@ -222,7 +262,74 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Event"];
+                    "application/json": components["schemas"]["Event"] | null;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_event_add_post: {
+        parameters: {
+            query: {
+                token: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Event"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StoredEvent"] | null;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    del_event_del_post: {
+        parameters: {
+            query: {
+                token: string;
+                id: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
             /** @description Validation Error */

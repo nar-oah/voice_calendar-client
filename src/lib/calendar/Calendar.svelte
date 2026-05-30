@@ -9,13 +9,21 @@
 	import { createCurrentTimePlugin } from '@schedule-x/current-time';
 	import { createEventsServicePlugin } from '@schedule-x/events-service';
 	import { createEventModalPlugin } from '@schedule-x/event-modal';
+	import { createCalendarControlsPlugin } from '@schedule-x/calendar-controls';
 	import WeekGridDate from '$lib/calendar/WeekGridDate.svelte';
 
 	let calendarApp = $state<CalendarApp>();
 	const eventsService = createEventsServicePlugin();
+	const calendarControls = createCalendarControlsPlugin();
 	const eventModal = createEventModalPlugin();
-	export function addEvent(event: CalendarEventExternal) {
+	export function addEvent(event: CalendarEventExternal): void {
 		eventsService.add(event);
+	}
+	export function delEvent(id: number): void {
+		eventsService.remove(id);
+	}
+	export function readEvent(time: Temporal.PlainDate): void {
+		calendarControls.setDate(time);
 	}
 	onMount(() => {
 		calendarApp = createCalendar({
@@ -31,7 +39,7 @@
 					minute: '2-digit'
 				}
 			},
-			plugins: [createCurrentTimePlugin(), eventsService, eventModal]
+			plugins: [createCurrentTimePlugin(), eventsService, eventModal, calendarControls]
 		});
 	});
 </script>
