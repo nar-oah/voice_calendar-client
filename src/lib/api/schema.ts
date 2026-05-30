@@ -132,11 +132,6 @@ export interface components {
              */
             second: number;
         };
-        /** TokenReq */
-        TokenReq: {
-            /** Token */
-            token: string;
-        };
         /** ValidationError */
         ValidationError: {
             /** Location */
@@ -181,16 +176,14 @@ export interface operations {
     };
     read_events_events_post: {
         parameters: {
-            query?: never;
+            query: {
+                token: string;
+            };
             header?: never;
             path?: never;
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TokenReq"];
-            };
-        };
+        requestBody?: never;
         responses: {
             /** @description Successful Response */
             200: {
