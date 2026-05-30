@@ -120,7 +120,9 @@
 					</h2>
 				</div>
 				<div class="flex items-center gap-2">
-					<span class={`rounded-md px-3 py-1 text-sm font-medium ${actionBadgeClass[draft.action]}`}>
+					<span
+						class={`rounded-md px-3 py-1 text-sm font-medium ${actionBadgeClass[draft.action]}`}
+					>
 						{actionText[draft.action]}
 					</span>
 					<button
@@ -163,27 +165,74 @@
 							<div class="grid grid-cols-3 gap-2">
 								<label class="grid gap-1">
 									<span class="text-xs text-zinc-500">年</span>
-									<input class="rounded-md border border-zinc-300 px-2 py-2" type="number" min="1" step="1" bind:value={draft.start.year} required />
+									<input
+										class="rounded-md border border-zinc-300 px-2 py-2"
+										type="number"
+										min="1"
+										step="1"
+										bind:value={draft.start.year}
+										required
+									/>
 								</label>
 								<label class="grid gap-1">
 									<span class="text-xs text-zinc-500">月</span>
-									<input class="rounded-md border border-zinc-300 px-2 py-2" type="number" min="1" max="12" step="1" bind:value={draft.start.month} required />
+									<input
+										class="rounded-md border border-zinc-300 px-2 py-2"
+										type="number"
+										min="1"
+										max="12"
+										step="1"
+										bind:value={draft.start.month}
+										required
+									/>
 								</label>
 								<label class="grid gap-1">
 									<span class="text-xs text-zinc-500">日</span>
-									<input class="rounded-md border border-zinc-300 px-2 py-2" type="number" min="1" max="31" step="1" bind:value={draft.start.day} required />
+									<input
+										class="rounded-md border border-zinc-300 px-2 py-2"
+										type="number"
+										min="1"
+										max="31"
+										step="1"
+										bind:value={draft.start.day}
+										required
+									/>
 								</label>
 								<label class="grid gap-1">
 									<span class="text-xs text-zinc-500">时</span>
-									<input class="rounded-md border border-zinc-300 px-2 py-2" type="number" min="0" max="23" step="1" bind:value={draft.start.hour} required />
+									<input
+										class="rounded-md border border-zinc-300 px-2 py-2"
+										type="number"
+										min="0"
+										max="23"
+										step="1"
+										bind:value={draft.start.hour}
+										required
+									/>
 								</label>
 								<label class="grid gap-1">
 									<span class="text-xs text-zinc-500">分</span>
-									<input class="rounded-md border border-zinc-300 px-2 py-2" type="number" min="0" max="59" step="1" bind:value={draft.start.minute} required />
+									<input
+										class="rounded-md border border-zinc-300 px-2 py-2"
+										type="number"
+										min="0"
+										max="59"
+										step="1"
+										bind:value={draft.start.minute}
+										required
+									/>
 								</label>
 								<label class="grid gap-1">
 									<span class="text-xs text-zinc-500">秒</span>
-									<input class="rounded-md border border-zinc-300 px-2 py-2" type="number" min="0" max="59" step="1" bind:value={draft.start.second} required />
+									<input
+										class="rounded-md border border-zinc-300 px-2 py-2"
+										type="number"
+										min="0"
+										max="59"
+										step="1"
+										bind:value={draft.start.second}
+										required
+									/>
 								</label>
 							</div>
 						</fieldset>
@@ -193,27 +242,74 @@
 							<div class="grid grid-cols-3 gap-2">
 								<label class="grid gap-1">
 									<span class="text-xs text-zinc-500">年</span>
-									<input class="rounded-md border border-zinc-300 px-2 py-2" type="number" min="1" step="1" bind:value={draft.end.year} required />
+									<input
+										class="rounded-md border border-zinc-300 px-2 py-2"
+										type="number"
+										min="1"
+										step="1"
+										bind:value={draft.end.year}
+										required
+									/>
 								</label>
 								<label class="grid gap-1">
 									<span class="text-xs text-zinc-500">月</span>
-									<input class="rounded-md border border-zinc-300 px-2 py-2" type="number" min="1" max="12" step="1" bind:value={draft.end.month} required />
+									<input
+										class="rounded-md border border-zinc-300 px-2 py-2"
+										type="number"
+										min="1"
+										max="12"
+										step="1"
+										bind:value={draft.end.month}
+										required
+									/>
 								</label>
 								<label class="grid gap-1">
 									<span class="text-xs text-zinc-500">日</span>
-									<input class="rounded-md border border-zinc-300 px-2 py-2" type="number" min="1" max="31" step="1" bind:value={draft.end.day} required />
+									<input
+										class="rounded-md border border-zinc-300 px-2 py-2"
+										type="number"
+										min="1"
+										max="31"
+										step="1"
+										bind:value={draft.end.day}
+										required
+									/>
 								</label>
 								<label class="grid gap-1">
 									<span class="text-xs text-zinc-500">时</span>
-									<input class="rounded-md border border-zinc-300 px-2 py-2" type="number" min="0" max="23" step="1" bind:value={draft.end.hour} required />
+									<input
+										class="rounded-md border border-zinc-300 px-2 py-2"
+										type="number"
+										min="0"
+										max="23"
+										step="1"
+										bind:value={draft.end.hour}
+										required
+									/>
 								</label>
 								<label class="grid gap-1">
 									<span class="text-xs text-zinc-500">分</span>
-									<input class="rounded-md border border-zinc-300 px-2 py-2" type="number" min="0" max="59" step="1" bind:value={draft.end.minute} required />
+									<input
+										class="rounded-md border border-zinc-300 px-2 py-2"
+										type="number"
+										min="0"
+										max="59"
+										step="1"
+										bind:value={draft.end.minute}
+										required
+									/>
 								</label>
 								<label class="grid gap-1">
 									<span class="text-xs text-zinc-500">秒</span>
-									<input class="rounded-md border border-zinc-300 px-2 py-2" type="number" min="0" max="59" step="1" bind:value={draft.end.second} required />
+									<input
+										class="rounded-md border border-zinc-300 px-2 py-2"
+										type="number"
+										min="0"
+										max="59"
+										step="1"
+										bind:value={draft.end.second}
+										required
+									/>
 								</label>
 							</div>
 						</fieldset>
