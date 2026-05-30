@@ -51,21 +51,30 @@
 			status = '正在聆听...';
 		};
 
-		recognition.onend = () => {
+		recognition.onend = async () => {
 			listening = false;
-			if (!stopping) {
-				status = recognizedText() ? '思考中...' : '等待开始。';
+			transcript += interimTranscript;
+			interimTranscript = '';
+
+			if (submitOnEnd) {
+				if (transcript) {
+					status = '思考中...';
+					const data = await getEvent(transcript);
+					if (data != undefined) {
+						onEventRecognized?.(data);
+					}
+				}
+				status = '识别已结束';
+			} else {
+				status = transcript ? '思考中...' : '等待开始。';
 			}
-			stopResolve?.();
-			stopResolve = null;
+			submitOnEnd = false;
 		};
 
 		recognition.onerror = (event) => {
 			listening = false;
-			stopping = false;
+			submitOnEnd = false;
 			status = `识别失败：${event.error}`;
-			stopResolve?.();
-			stopResolve = null;
 		};
 
 		recognition.onresult = (event) => {
