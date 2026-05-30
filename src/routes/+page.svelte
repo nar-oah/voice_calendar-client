@@ -48,7 +48,7 @@
 		};
 	}
 	function handleEventsSynced(data: StoredEvent[]): void {
-		data.map(toStoredScheduleXEvent).forEach((event) => calendar?.addEvent(event));
+		data.map((event: StoredEvent) => calendar?.addEvent(toStoredScheduleXEvent(event)));
 	}
 </script>
 
