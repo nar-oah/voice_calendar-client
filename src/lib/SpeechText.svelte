@@ -9,6 +9,7 @@
 
 	let supported = $state(false);
 	let listening = $state(false);
+	let stopping = $state(false);
 	let transcript = $state('');
 	let interimTranscript = $state('');
 	let status = $state('正在检测浏览器支持...');
@@ -18,7 +19,7 @@
 	const recognizedText = () => `${transcript}${interimTranscript}`.trim();
 
 	const startRecognition = () => {
-		if (!recognition || listening) return;
+		if (!recognition || listening || stopping) return;
 		transcript = '';
 		interimTranscript = '';
 		status = '正在聆听...';
@@ -26,7 +27,8 @@
 	};
 
 	const stopRecognition = async () => {
-		if (!recognition || !listening) return;
+		if (!recognition || !listening || stopping) return;
+		stopping = true;
 		status = '正在结束识别...';
 		const textBeforeStop = recognizedText();
 		await new Promise<void>((resolve) => {
@@ -42,6 +44,7 @@
 			}
 		}
 		status = '识别已结束';
+		stopping = false;
 	};
 
 	onMount(() => {
@@ -66,13 +69,16 @@
 
 		recognition.onend = () => {
 			listening = false;
-			status = recognizedText() ? '思考中...' : '等待开始。';
+			if (!stopping) {
+				status = recognizedText() ? '思考中...' : '等待开始。';
+			}
 			stopResolve?.();
 			stopResolve = null;
 		};
 
 		recognition.onerror = (event) => {
 			listening = false;
+			stopping = false;
 			status = `识别失败：${event.error}`;
 			stopResolve?.();
 			stopResolve = null;
@@ -114,14 +120,14 @@
 			<div class="flex flex-wrap items-center gap-3">
 				<button
 					class="rounded-md bg-zinc-950 px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:bg-zinc-300"
-					disabled={!supported || listening}
+					disabled={!supported || listening || stopping}
 					onclick={startRecognition}
 				>
 					开始识别
 				</button>
 				<button
 					class="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-900 disabled:cursor-not-allowed disabled:text-zinc-300"
-					disabled={!supported || !listening}
+					disabled={!supported || !listening || stopping}
 					onclick={stopRecognition}
 				>
 					停止
