@@ -12,22 +12,96 @@
 	let transcript = $state('');
 	let interimTranscript = $state('');
 	let status = $state('正在检测浏览器支持...');
+	let creating = $state(false);
 	let recognition: SpeechRecognition | null = null;
-	let submitOnEnd = false;
+	let createOnEnd = false;
+
+	type Event = components['schemas']['Event'];
+	type Time = components['schemas']['Time'];
+
+	const getCurrentTime = (): Time => {
+		const now = new Date();
+		return {
+			year: now.getFullYear(),
+			month: now.getMonth() + 1,
+			day: now.getDate(),
+			hour: now.getHours(),
+			minute: now.getMinutes(),
+			second: now.getSeconds()
+		};
+	};
+
+	const getEmptyEvent = (): Event => {
+		const now = getCurrentTime();
+		return {
+			action: 'create',
+			title: '',
+			start: now,
+			end: { ...now },
+			location: null,
+			description: null
+		};
+	};
+
+	const commitInterimTranscript = () => {
+		if (!interimTranscript) return;
+		transcript += interimTranscript;
+		interimTranscript = '';
+	};
+
+	const getRecognizedText = () => `${transcript}${interimTranscript}`.trim();
+
+	const submitSchedule = async () => {
+		const text = getRecognizedText();
+		if (!text) {
+			onEventRecognized?.(getEmptyEvent());
+			status = '已生成空白日程';
+			return;
+		}
+
+		status = '思考中...';
+		const data = await getEvent(text);
+		if (data != undefined) {
+			onEventRecognized?.(data);
+		}
+		status = '识别已结束';
+	};
 
 	const startRecognition = () => {
-		if (!recognition || listening) return;
-		transcript = '';
-		interimTranscript = '';
-		submitOnEnd = false;
+		if (!recognition || listening || creating) return;
+		createOnEnd = false;
 		status = '正在聆听...';
 		recognition.start();
 	};
 
 	const stopRecognition = () => {
 		if (!recognition || !listening) return;
-		submitOnEnd = true;
+		createOnEnd = false;
+		status = '正在停止...';
 		recognition.stop();
+	};
+
+	const toggleRecognition = () => {
+		if (listening) {
+			stopRecognition();
+		} else {
+			startRecognition();
+		}
+	};
+
+	const createSchedule = async () => {
+		if (creating) return;
+		creating = true;
+
+		if (recognition && listening) {
+			createOnEnd = true;
+			status = '正在整理识别内容...';
+			recognition.stop();
+			return;
+		}
+
+		await submitSchedule();
+		creating = false;
 	};
 
 	onMount(() => {
@@ -52,27 +126,22 @@
 
 		recognition.onend = async () => {
 			listening = false;
-			transcript += interimTranscript;
-			interimTranscript = '';
+			commitInterimTranscript();
 
-			if (submitOnEnd) {
-				if (transcript) {
-					status = '思考中...';
-					const data = await getEvent(transcript);
-					if (data != undefined) {
-						onEventRecognized?.(data);
-					}
-				}
-				status = '识别已结束';
-			} else {
-				status = transcript ? '思考中...' : '等待开始。';
+			if (createOnEnd) {
+				await submitSchedule();
+				createOnEnd = false;
+				creating = false;
+				return;
 			}
-			submitOnEnd = false;
+
+			status = transcript ? '识别已停止，可继续开始或新建日程。' : '等待开始。';
 		};
 
 		recognition.onerror = (event) => {
 			listening = false;
-			submitOnEnd = false;
+			creating = false;
+			createOnEnd = false;
 			status = `识别失败：${event.error}`;
 		};
 
@@ -112,17 +181,17 @@
 			<div class="flex flex-wrap items-center gap-3">
 				<button
 					class="rounded-md bg-zinc-950 px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:bg-zinc-300"
-					disabled={!supported || listening}
-					onclick={startRecognition}
+					disabled={!supported || creating}
+					onclick={toggleRecognition}
 				>
-					开始识别
+					{listening ? '停止' : '开始识别'}
 				</button>
 				<button
 					class="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-900 disabled:cursor-not-allowed disabled:text-zinc-300"
-					disabled={!supported || !listening}
-					onclick={stopRecognition}
+					disabled={creating}
+					onclick={createSchedule}
 				>
-					停止
+					新建日程
 				</button>
 				<span class="text-sm text-zinc-500">{status}</span>
 			</div>
