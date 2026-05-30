@@ -50,7 +50,7 @@
 <main class="px-5 text-zinc-950">
 	<section class="flex gap-2">
 		<input
-			class="min-w-0 flex-1 rounded-md bg-white px-3 py-2 text-sm text-zinc-900 outline-none placeholder:text-zinc-400"
+			class="min-w-0 flex-1 rounded-md b-solid b-3 b-black bg-white px-5 py-2 text-sm text-zinc-900 outline-none placeholder:text-zinc-400"
 			type="text"
 			placeholder="输入token以同步"
 			bind:value={token}

@@ -16,7 +16,7 @@
 	} = $props();
 </script>
 
-<div class="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm">
+<div class="rounded-lg b-solid b-3 b-black bg-white p-5">
 	<div class="flex flex-wrap items-center gap-3">
 		<button
 			type="button"

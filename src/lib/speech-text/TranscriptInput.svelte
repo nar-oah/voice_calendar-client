@@ -8,7 +8,7 @@
 	} = $props();
 </script>
 
-<div class="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm">
+<div class="rounded-lg b-solid b-3 b-black bg-white p-5">
 	<label for="speech-transcript" class="text-base font-medium">您的需求是?</label>
 	<textarea
 		id="speech-transcript"
