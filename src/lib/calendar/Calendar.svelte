@@ -8,10 +8,12 @@
 	import '@schedule-x/theme-shadcn/dist/index.css';
 	import { createCurrentTimePlugin } from '@schedule-x/current-time';
 	import { createEventsServicePlugin } from '@schedule-x/events-service';
+	import { createEventModalPlugin } from '@schedule-x/event-modal';
 	import WeekGridDate from '$lib/calendar/WeekGridDate.svelte';
 
 	let calendarApp = $state<CalendarApp>();
 	const eventsService = createEventsServicePlugin();
+	const eventModal = createEventModalPlugin();
 	export function addEvent(event: CalendarEventExternal) {
 		eventsService.add(event);
 	}
@@ -29,7 +31,7 @@
 					minute: '2-digit'
 				}
 			},
-			plugins: [createCurrentTimePlugin(), eventsService]
+			plugins: [createCurrentTimePlugin(), eventsService, eventModal]
 		});
 	});
 </script>
