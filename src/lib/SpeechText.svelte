@@ -14,37 +14,21 @@
 	let interimTranscript = $state('');
 	let status = $state('正在检测浏览器支持...');
 	let recognition: SpeechRecognition | null = null;
-	let stopResolve: (() => void) | null = null;
-
-	const recognizedText = () => `${transcript}${interimTranscript}`.trim();
+	let submitOnEnd = false;
 
 	const startRecognition = () => {
-		if (!recognition || listening || stopping) return;
+		if (!recognition || listening) return;
 		transcript = '';
 		interimTranscript = '';
+		submitOnEnd = false;
 		status = '正在聆听...';
 		recognition.start();
 	};
 
-	const stopRecognition = async () => {
-		if (!recognition || !listening || stopping) return;
-		stopping = true;
-		status = '正在结束识别...';
-		const textBeforeStop = recognizedText();
-		await new Promise<void>((resolve) => {
-			stopResolve = resolve;
-			recognition?.stop();
-		});
-		const text = recognizedText() || textBeforeStop;
-		if (text) {
-			status = '思考中...';
-			const data = await getEvent(text);
-			if (data != undefined) {
-				onEventRecognized?.(data);
-			}
-		}
-		status = '识别已结束';
-		stopping = false;
+	const stopRecognition = () => {
+		if (!recognition || !listening) return;
+		submitOnEnd = true;
+		recognition.stop();
 	};
 
 	onMount(() => {
