@@ -24,7 +24,7 @@
 			disabled={!supported || creating}
 			onclick={onToggle}
 		>
-			{listening ? '停止' : '开始识别'}
+			{listening ? '停止' : '语音输入'}
 		</button>
 		<button
 			type="button"

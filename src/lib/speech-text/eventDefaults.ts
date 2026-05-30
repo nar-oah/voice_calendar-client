@@ -3,23 +3,22 @@ import type { components } from '$lib/api/schema';
 export type ScheduleEvent = components['schemas']['Event'];
 export type ScheduleTime = components['schemas']['Time'];
 
-const getCurrentTime = (): ScheduleTime => {
-	const now = new Date();
-	return {
-		year: now.getFullYear(),
-		month: now.getMonth() + 1,
-		day: now.getDate(),
-		hour: now.getHours(),
-		minute: now.getMinutes(),
-		second: now.getSeconds()
-	};
-};
-
 export const getEmptyEvent = (): ScheduleEvent => {
+	const getCurrentTime = (): ScheduleTime => {
+		const now = new Date(Date.now() + 10 * 60 * 1000);
+		return {
+			year: now.getFullYear(),
+			month: now.getMonth() + 1,
+			day: now.getDate(),
+			hour: now.getHours(),
+			minute: now.getMinutes(),
+			second: now.getSeconds()
+		};
+	};
 	const now = getCurrentTime();
 	return {
 		action: 'create',
-		title: '',
+		title: '十分钟后提醒我喝水',
 		start: now,
 		end: { ...now },
 		location: null,
