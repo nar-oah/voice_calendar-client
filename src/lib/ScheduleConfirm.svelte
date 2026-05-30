@@ -81,11 +81,12 @@
 		editing = false;
 	});
 
-	const confirm = () => {
-		const event = normalizeEvent();
-		if (event.action === 'create') onCreate?.(event);
-		if (event.action === 'delete') onDelete?.(event);
-		if (event.action === 'update') onUpdate?.(event);
+	const confirm = (submitEvent: SubmitEvent) => {
+		submitEvent.preventDefault();
+		const scheduleEvent = normalizeEvent();
+		if (scheduleEvent.action === 'create') onCreate?.(scheduleEvent);
+		if (scheduleEvent.action === 'delete') onDelete?.(scheduleEvent);
+		if (scheduleEvent.action === 'update') onUpdate?.(scheduleEvent);
 	};
 </script>
 
