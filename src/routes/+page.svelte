@@ -40,7 +40,12 @@
 			<ScheduleConfirm
 				data={pendingEvent}
 				onCancel={() => (pendingEvent = null)}
-				onConfirm={() => handleConfirm()}
+				onCreate={(data) => {
+					pendingEvent = data;
+					handleConfirm();
+				}}
+				onDelete={() => {}}
+				onUpdate={() => {}}
 			/>
 		{/if}
 	</section>
