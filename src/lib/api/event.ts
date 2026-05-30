@@ -33,3 +33,16 @@ export async function getEvents(token: string): Promise<StoredEvent[] | undefine
 		return data;
 	}
 }
+export async function addEvents(token: string, event: Event): Promise<StoredEvent | undefined> {
+	const { data, error } = await api.POST('/add', {
+		params: {
+			query: {
+				token
+			}
+		},
+		body: event
+	});
+	if (!error && data) {
+		return data;
+	}
+}
