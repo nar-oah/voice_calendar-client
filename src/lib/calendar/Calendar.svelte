@@ -14,11 +14,9 @@
 	let calendarApp = $state<CalendarApp>();
 	const eventsService = createEventsServicePlugin();
 	const eventModal = createEventModalPlugin();
-
 	export function addEvent(event: CalendarEventExternal) {
 		eventsService.add(event);
 	}
-
 	onMount(() => {
 		calendarApp = createCalendar({
 			theme: 'shadcn',
