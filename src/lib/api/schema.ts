@@ -4,6 +4,40 @@
  */
 
 export interface paths {
+    "/token": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Create Token */
+        get: operations["create_token_token_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Read Events */
+        post: operations["read_events_events_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/event": {
         parameters: {
             query?: never;
@@ -13,8 +47,8 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Get Health */
-        post: operations["get_health_event_post"];
+        /** Get Events */
+        post: operations["get_events_event_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -29,7 +63,7 @@ export interface components {
          * Action
          * @enum {string}
          */
-        Action: "create" | "delete" | "update";
+        Action: "create" | "delete" | "read";
         /** Event */
         Event: {
             /** @description 用户想执行的日程操作 */
@@ -58,6 +92,27 @@ export interface components {
         HTTPValidationError: {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
+        };
+        /** StoredEvent */
+        StoredEvent: {
+            /** Id */
+            id: number;
+            /** Title */
+            title: string;
+            /**
+             * Start At
+             * Format: date-time
+             */
+            start_at: string;
+            /**
+             * End At
+             * Format: date-time
+             */
+            end_at: string;
+            /** Location */
+            location: string | null;
+            /** Description */
+            description: string | null;
         };
         /** Time */
         Time: {
@@ -99,7 +154,58 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    get_health_event_post: {
+    create_token_token_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    read_events_events_post: {
+        parameters: {
+            query: {
+                token: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StoredEvent"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_events_event_post: {
         parameters: {
             query: {
                 text: string;
