@@ -39,13 +39,11 @@
 		pendingEvent = null;
 	}
 	function handleRead(time: Time): void {
-		function get_zdt(t: Time): Temporal.ZonedDateTime {
+		function get_pd(t: Time): Temporal.PlainDate {
 			const pad = (value: number): string => String(value).padStart(2, '0');
-			const value = `${t.year}-${pad(t.month)}-${pad(t.day)}T${pad(t.hour)}:${pad(t.minute)}:${pad(t.second)}`;
-			const zone = '+08:00[Asia/Shanghai]';
-			return Temporal.ZonedDateTime.from(value + zone);
+			return Temporal.PlainDate.from(`${t.year}-${pad(t.month)}-${pad(t.day)}`);
 		}
-		calendar?.readEvent(get_zdt(time));
+		calendar?.readEvent(get_pd(time));
 		pendingEvent = null;
 	}
 	function handleEventsSynced(data: StoredEvent[]): void {
