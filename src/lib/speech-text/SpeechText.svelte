@@ -33,8 +33,10 @@
 		const data = await getEvent(token, text);
 		if (data != undefined) {
 			onEventRecognized?.(data);
+			status = '识别已结束';
+		} else {
+			status = '找不到您说的日程';
 		}
-		status = '识别已结束';
 	};
 
 	const startRecognition = () => {
