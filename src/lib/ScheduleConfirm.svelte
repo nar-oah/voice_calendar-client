@@ -73,7 +73,14 @@
 		description: normalizeText(draft.description)
 	});
 
-	let draft = $state<EditableEvent>(copyEvent(data));
+	let draft = $state<EditableEvent>({
+		action: 'create',
+		title: '',
+		start: { year: 0, month: 1, day: 1, hour: 0, minute: 0, second: 0 },
+		end: { year: 0, month: 1, day: 1, hour: 0, minute: 0, second: 0 },
+		location: '',
+		description: ''
+	});
 	let editing = $state(false);
 
 	$effect(() => {
@@ -98,7 +105,7 @@
 		onclick={() => onCancel?.()}
 	></button>
 
-	<section
+	<div
 		class="relative max-h-[calc(100vh-2rem)] w-full max-w-2xl overflow-y-auto rounded-lg border border-zinc-200 bg-white p-5 shadow-xl"
 		role="dialog"
 		aria-modal="true"
@@ -266,5 +273,5 @@
 				</button>
 			</div>
 		</form>
-	</section>
+	</div>
 </div>
