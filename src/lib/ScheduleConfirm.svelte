@@ -27,25 +27,25 @@
 	const actionText = {
 		create: '新建',
 		delete: '删除',
-		update: '更新'
+		read: '更新'
 	} satisfies Record<ScheduleEvent['action'], string>;
 
 	const confirmText = {
 		create: '确认创建',
 		delete: '确认删除',
-		update: '确认修改'
+		read: '确认修改'
 	} satisfies Record<ScheduleEvent['action'], string>;
 
 	const actionBadgeClass = {
 		create: 'bg-zinc-950 text-white',
 		delete: 'bg-red-600 text-white',
-		update: 'bg-amber-500 text-zinc-950'
+		read: 'bg-amber-500 text-zinc-950'
 	} satisfies Record<ScheduleEvent['action'], string>;
 
 	const confirmButtonClass = {
 		create: 'bg-zinc-950 text-white hover:bg-zinc-800',
 		delete: 'bg-red-600 text-white hover:bg-red-700',
-		update: 'bg-amber-500 text-zinc-950 hover:bg-amber-400'
+		read: 'bg-amber-500 text-zinc-950 hover:bg-amber-400'
 	} satisfies Record<ScheduleEvent['action'], string>;
 
 	const pad = (value: number) => String(value).padStart(2, '0');
@@ -93,7 +93,7 @@
 		const scheduleEvent = normalizeEvent();
 		if (scheduleEvent.action === 'create') onCreate?.(scheduleEvent);
 		if (scheduleEvent.action === 'delete') onDelete?.(scheduleEvent);
-		if (scheduleEvent.action === 'update') onUpdate?.(scheduleEvent);
+		if (scheduleEvent.action === 'read') onUpdate?.(scheduleEvent);
 	};
 </script>
 
