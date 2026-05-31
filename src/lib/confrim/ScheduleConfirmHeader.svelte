@@ -24,10 +24,14 @@
 		>
 			{actionText[draft.action]}
 		</span>
-		<p class="text-sm text-zinc-500">待确认操作</p>
-		<h2 id="schedule-confirm-title" class="mt-1 text-xl font-semibold text-zinc-950">
-			{draft.title || '未命名日程'}
-		</h2>
+		{#if editing}
+			<h2 id="schedule-confirm-title" class="sr-only">{draft.title || '未命名日程'}</h2>
+		{:else}
+			<p class="text-sm text-zinc-500">待确认操作</p>
+			<h2 id="schedule-confirm-title" class="mt-1 text-xl font-semibold text-zinc-950">
+				{draft.title || '未命名日程'}
+			</h2>
+		{/if}
 	</div>
 	<div class="flex items-center">
 		<button type="button" class={editButtonClass} onclick={onToggle}>
