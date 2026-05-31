@@ -25,6 +25,9 @@
 	export function readEvent(time: Temporal.PlainDate): void {
 		calendarControls.setDate(time);
 	}
+	export function get_date(): Temporal.PlainDate {
+		return calendarControls.getDate();
+	}
 	onMount(() => {
 		calendarApp = createCalendar({
 			theme: 'shadcn',

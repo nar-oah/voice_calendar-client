@@ -5,7 +5,7 @@
 	import SyncPanel from '$lib/sync/SyncPanel.svelte';
 	import type { components } from '$lib/api/schema';
 	import type { CalendarEventExternal } from '@schedule-x/calendar';
-	import { addEvents, delEvents } from '$lib/api/event';
+	import { addEvents, delEvents, getIcs } from '$lib/api/event';
 	import { addReminder } from '$lib/api/remind';
 
 	type Event = components['schemas']['Event'];
@@ -53,6 +53,10 @@
 	}
 	async function handleEventsSynced(data: StoredEvent[]): Promise<void> {
 		data.map(async (event: StoredEvent) => await addCalendar(event));
+	}
+	function handleExport(): void {
+		const date = calendar?.get_date();
+		if (date) getIcs(token, date);
 	}
 </script>
 
