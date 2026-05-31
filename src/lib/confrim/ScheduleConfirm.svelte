@@ -1,14 +1,15 @@
 <script lang="ts">
-	import type { components } from '$lib/api/schema';
-
-	type ScheduleEvent = components['schemas']['Event'];
-	type ScheduleTime = components['schemas']['Time'];
-	type EditableEvent = Omit<ScheduleEvent, 'start' | 'end' | 'location' | 'description'> & {
-		start: ScheduleTime;
-		end: ScheduleTime;
-		location: string;
-		description: string;
-	};
+	import ScheduleConfirmActions from './ScheduleConfirmActions.svelte';
+	import ScheduleConfirmEditor from './ScheduleConfirmEditor.svelte';
+	import ScheduleConfirmHeader from './ScheduleConfirmHeader.svelte';
+	import ScheduleConfirmSummary from './ScheduleConfirmSummary.svelte';
+	import {
+		copyEvent,
+		emptyEvent,
+		normalizeEvent,
+		type ScheduleEvent,
+		type ScheduleTime
+	} from './scheduleConfirm';
 
 	let {
 		data,
@@ -24,73 +25,7 @@
 		onCancel?: () => void;
 	} = $props();
 
-	const actionText = {
-		create: '新建',
-		delete: '删除',
-		read: '查看'
-	} satisfies Record<ScheduleEvent['action'], string>;
-
-	const confirmText = {
-		create: '确认创建',
-		delete: '确认删除',
-		read: '跳转日期'
-	} satisfies Record<ScheduleEvent['action'], string>;
-
-	const actionBadgeClass = {
-		create: 'bg-zinc-950 text-white',
-		delete: 'bg-red-600 text-white',
-		read: 'bg-amber-500 text-zinc-950'
-	} satisfies Record<ScheduleEvent['action'], string>;
-
-	const confirmButtonClass = {
-		create: 'b-zinc-950 bg-zinc-950 text-white hover:bg-zinc-800',
-		delete: 'b-red-600 bg-red-600 text-white hover:bg-red-700',
-		read: 'b-amber-500 bg-amber-500 text-zinc-950 hover:bg-amber-400'
-	} satisfies Record<ScheduleEvent['action'], string>;
-
-	const editButtonClass =
-		'rounded-lg b-2 b-solid b-zinc-950 bg-white px-4 py-2 text-sm font-medium whitespace-nowrap text-zinc-950 shadow-sm transition hover:bg-zinc-100';
-	const fieldClass =
-		'rounded-md b-solid b-3 b-black bg-white px-5 py-2 text-sm text-zinc-900 outline-none placeholder:text-zinc-400';
-	const smallFieldClass =
-		'rounded-md b-solid b-3 b-black bg-white px-3 py-2 text-sm text-zinc-900 outline-none placeholder:text-zinc-400';
-
-	const pad = (value: number) => String(value).padStart(2, '0');
-	const formatTime = (time: ScheduleTime) =>
-		`${time.year}-${pad(time.month)}-${pad(time.day)} ${pad(time.hour)}:${pad(time.minute)}:${pad(time.second)}`;
-	const copyTime = (time: ScheduleTime): ScheduleTime => ({ ...time });
-	const copyEvent = (event: ScheduleEvent): EditableEvent => ({
-		id: event.id,
-		action: event.action,
-		title: event.title,
-		start: copyTime(event.start),
-		end: copyTime(event.end),
-		location: event.location ?? '',
-		description: event.description ?? ''
-	});
-	const normalizeText = (value: string): string | null => {
-		const text = value.trim();
-		return text ? text : null;
-	};
-	const normalizeEvent = (): ScheduleEvent => ({
-		id: draft.id,
-		action: draft.action,
-		title: draft.title.trim(),
-		start: copyTime(draft.start),
-		end: copyTime(draft.end),
-		location: normalizeText(draft.location),
-		description: normalizeText(draft.description)
-	});
-
-	let draft = $state<EditableEvent>({
-		id: 0,
-		action: 'create',
-		title: '',
-		start: { year: 0, month: 1, day: 1, hour: 0, minute: 0, second: 0 },
-		end: { year: 0, month: 1, day: 1, hour: 0, minute: 0, second: 0 },
-		location: '',
-		description: ''
-	});
+	let draft = $state(emptyEvent());
 	let editing = $state(false);
 
 	$effect(() => {
@@ -100,7 +35,7 @@
 
 	const confirm = (submitEvent: SubmitEvent) => {
 		submitEvent.preventDefault();
-		const scheduleEvent = normalizeEvent();
+		const scheduleEvent = normalizeEvent(draft);
 		if (scheduleEvent.action === 'create') onCreate?.(scheduleEvent);
 		if (scheduleEvent.action === 'delete') onDelete?.(scheduleEvent.id);
 		if (scheduleEvent.action === 'read') onRead?.(scheduleEvent.start);
@@ -122,237 +57,15 @@
 		aria-labelledby="schedule-confirm-title"
 	>
 		<form onsubmit={confirm}>
-			<div class="flex flex-wrap items-start justify-between gap-4">
-				<div class="grid gap-2">
-					<span
-						class={`w-fit rounded-md px-3 py-1 text-sm font-medium ${actionBadgeClass[draft.action]}`}
-					>
-						{actionText[draft.action]}
-					</span>
-					<p class="text-sm text-zinc-500">待确认操作</p>
-					<h2 id="schedule-confirm-title" class="mt-1 text-xl font-semibold text-zinc-950">
-						{draft.title || '未命名日程'}
-					</h2>
-				</div>
-				<div class="flex items-center">
-					<button type="button" class={editButtonClass} onclick={() => (editing = !editing)}>
-						{editing ? '完成编辑' : '修改'}
-					</button>
-				</div>
-			</div>
+			<ScheduleConfirmHeader {draft} {editing} onToggle={() => (editing = !editing)} />
 
 			{#if editing}
-				<div class="mt-5 grid gap-4 text-sm">
-					<label class="grid gap-1.5">
-						<span class="text-zinc-500">操作</span>
-						<select class={fieldClass} bind:value={draft.action}>
-							<option value="create">新建</option>
-							<option value="delete">删除</option>
-							<option value="read">查看</option>
-						</select>
-					</label>
-
-					<label class="grid gap-1.5">
-						<span class="text-zinc-500">标题</span>
-						<input class={fieldClass} type="text" bind:value={draft.title} required />
-					</label>
-
-					<div class="grid gap-3 sm:grid-cols-2">
-						<fieldset class="rounded-md b-2 b-solid b-zinc-200 p-3">
-							<legend class="px-1 text-zinc-500">开始时间</legend>
-							<div class="grid grid-cols-3 gap-2">
-								<label class="grid gap-1">
-									<span class="text-xs text-zinc-500">年</span>
-									<input
-										class={smallFieldClass}
-										type="number"
-										min="1"
-										step="1"
-										bind:value={draft.start.year}
-										required
-									/>
-								</label>
-								<label class="grid gap-1">
-									<span class="text-xs text-zinc-500">月</span>
-									<input
-										class={smallFieldClass}
-										type="number"
-										min="1"
-										max="12"
-										step="1"
-										bind:value={draft.start.month}
-										required
-									/>
-								</label>
-								<label class="grid gap-1">
-									<span class="text-xs text-zinc-500">日</span>
-									<input
-										class={smallFieldClass}
-										type="number"
-										min="1"
-										max="31"
-										step="1"
-										bind:value={draft.start.day}
-										required
-									/>
-								</label>
-								<label class="grid gap-1">
-									<span class="text-xs text-zinc-500">时</span>
-									<input
-										class={smallFieldClass}
-										type="number"
-										min="0"
-										max="23"
-										step="1"
-										bind:value={draft.start.hour}
-										required
-									/>
-								</label>
-								<label class="grid gap-1">
-									<span class="text-xs text-zinc-500">分</span>
-									<input
-										class={smallFieldClass}
-										type="number"
-										min="0"
-										max="59"
-										step="1"
-										bind:value={draft.start.minute}
-										required
-									/>
-								</label>
-								<label class="grid gap-1">
-									<span class="text-xs text-zinc-500">秒</span>
-									<input
-										class={smallFieldClass}
-										type="number"
-										min="0"
-										max="59"
-										step="1"
-										bind:value={draft.start.second}
-										required
-									/>
-								</label>
-							</div>
-						</fieldset>
-
-						<fieldset class="rounded-md b-2 b-solid b-zinc-200 p-3">
-							<legend class="px-1 text-zinc-500">结束时间</legend>
-							<div class="grid grid-cols-3 gap-2">
-								<label class="grid gap-1">
-									<span class="text-xs text-zinc-500">年</span>
-									<input
-										class={smallFieldClass}
-										type="number"
-										min="1"
-										step="1"
-										bind:value={draft.end.year}
-										required
-									/>
-								</label>
-								<label class="grid gap-1">
-									<span class="text-xs text-zinc-500">月</span>
-									<input
-										class={smallFieldClass}
-										type="number"
-										min="1"
-										max="12"
-										step="1"
-										bind:value={draft.end.month}
-										required
-									/>
-								</label>
-								<label class="grid gap-1">
-									<span class="text-xs text-zinc-500">日</span>
-									<input
-										class={smallFieldClass}
-										type="number"
-										min="1"
-										max="31"
-										step="1"
-										bind:value={draft.end.day}
-										required
-									/>
-								</label>
-								<label class="grid gap-1">
-									<span class="text-xs text-zinc-500">时</span>
-									<input
-										class={smallFieldClass}
-										type="number"
-										min="0"
-										max="23"
-										step="1"
-										bind:value={draft.end.hour}
-										required
-									/>
-								</label>
-								<label class="grid gap-1">
-									<span class="text-xs text-zinc-500">分</span>
-									<input
-										class={smallFieldClass}
-										type="number"
-										min="0"
-										max="59"
-										step="1"
-										bind:value={draft.end.minute}
-										required
-									/>
-								</label>
-								<label class="grid gap-1">
-									<span class="text-xs text-zinc-500">秒</span>
-									<input
-										class={smallFieldClass}
-										type="number"
-										min="0"
-										max="59"
-										step="1"
-										bind:value={draft.end.second}
-										required
-									/>
-								</label>
-							</div>
-						</fieldset>
-					</div>
-
-					<label class="grid gap-1.5">
-						<span class="text-zinc-500">地点</span>
-						<input class={fieldClass} type="text" bind:value={draft.location} />
-					</label>
-
-					<label class="grid gap-1.5">
-						<span class="text-zinc-500">备注</span>
-						<textarea class={`min-h-24 ${fieldClass}`} bind:value={draft.description}></textarea>
-					</label>
-				</div>
+				<ScheduleConfirmEditor bind:draft />
 			{:else}
-				<dl class="mt-5 grid gap-3 text-sm">
-					<div class="grid grid-cols-[4rem_1fr] gap-3">
-						<dt class="text-zinc-500">开始</dt>
-						<dd class="text-zinc-950">{formatTime(draft.start)}</dd>
-					</div>
-					<div class="grid grid-cols-[4rem_1fr] gap-3">
-						<dt class="text-zinc-500">结束</dt>
-						<dd class="text-zinc-950">{formatTime(draft.end)}</dd>
-					</div>
-					<div class="grid grid-cols-[4rem_1fr] gap-3">
-						<dt class="text-zinc-500">地点</dt>
-						<dd class="text-zinc-950">{draft.location || '无'}</dd>
-					</div>
-					<div class="grid grid-cols-[4rem_1fr] gap-3">
-						<dt class="text-zinc-500">备注</dt>
-						<dd class="whitespace-pre-wrap text-zinc-950">{draft.description || '无'}</dd>
-					</div>
-				</dl>
+				<ScheduleConfirmSummary {draft} />
 			{/if}
 
-			<div class="mt-5 flex justify-end gap-3">
-				<button type="button" class={editButtonClass} onclick={() => onCancel?.()}> 取消 </button>
-				<button
-					type="submit"
-					class={`rounded-lg b-2 b-solid px-4 py-2 text-sm font-medium shadow-sm transition ${confirmButtonClass[draft.action]}`}
-				>
-					{confirmText[draft.action]}
-				</button>
-			</div>
+			<ScheduleConfirmActions action={draft.action} {onCancel} />
 		</form>
 	</div>
 </div>
