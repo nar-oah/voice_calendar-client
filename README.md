@@ -1,5 +1,7 @@
 # Voice Calendar 语音日历工具
 
+Demo 演示视频：[Bilibili](https://www.bilibili.com/video/BV1ShVU6pEEu/?share_source=copy_web&vd_source=4e7307313c29024bdfe7842ec26e6e3d)
+
 Voice Calendar 是一个以语音交互为核心的日历管理工具，面向“高频、轻量、跨设备”的日程管理场景。用户可以直接说出或输入自然语言需求，例如“十分钟后提醒我喝水”“明天下午两点在肯德基吃饭”“删除明天的会议”，系统会把需求解析为结构化日程，先弹出确认窗口，再由用户决定创建、删除或跳转查看。
 
 本仓库是前端客户端，后端仓库见 [voice_calendar-server](https://github.com/nar-oah/voice_calendar-server)。
