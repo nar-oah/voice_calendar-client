@@ -48,21 +48,19 @@
 	});
 </script>
 
-<main class="px-5 text-zinc-950">
-	<section class="flex gap-2">
-		<input
-			class="min-w-0 flex-1 rounded-md b-solid b-3 b-black bg-white px-5 py-2 text-sm text-zinc-900 outline-none placeholder:text-zinc-400"
-			type="text"
-			placeholder="输入token以同步"
-			bind:value={token}
-		/>
-		<button
-			type="button"
-			class="rounded-lg bg-zinc-950 px-4 py-2 text-sm font-medium whitespace-nowrap text-white shadow-sm transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:bg-zinc-400"
-			disabled={loading}
-			onclick={handleClick}
-		>
-			{buttonText()}
-		</button>
-	</section>
-</main>
+<section class="flex gap-2">
+	<input
+		class="min-w-0 flex-1 rounded-md b-solid b-3 b-black bg-white px-5 py-2 text-sm text-zinc-900 outline-none placeholder:text-zinc-400"
+		type="text"
+		placeholder="输入token以同步"
+		bind:value={token}
+	/>
+	<button
+		type="button"
+		class="rounded-lg bg-zinc-950 px-4 py-2 text-sm font-medium whitespace-nowrap text-white shadow-sm transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:bg-zinc-400"
+		disabled={loading}
+		onclick={handleClick}
+	>
+		{buttonText()}
+	</button>
+</section>
