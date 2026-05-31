@@ -63,7 +63,7 @@
 <main class="flex w-full gap-8">
 	<section class="flex flex-1 flex-col gap-2">
 		<SpeechText {token} onEventRecognized={(data) => (pendingEvent = data)} />
-		<SyncPanel bind:token onEventsSynced={handleEventsSynced} />
+		<SyncPanel bind:token onEventsSynced={handleEventsSynced} onExport={handleExport} />
 	</section>
 	<section class="flex-1">
 		<Calendar bind:this={calendar} />

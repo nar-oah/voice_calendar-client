@@ -7,14 +7,17 @@
 
 	let {
 		token = $bindable(''),
-		onEventsSynced
+		onEventsSynced,
+		onExport
 	}: {
 		token?: string;
 		onEventsSynced?: (data: StoredEvent[]) => void;
+		onExport?: () => void;
 	} = $props();
 
 	const tokenStorageKey = 'voice_calendar_token';
 	let loading = $state(false);
+	let showExport = $state(false);
 
 	const currentToken = () => token.trim();
 	const buttonText = () => (token.trim() ? '同步' : '获取Token');
@@ -38,7 +41,10 @@
 		const value = currentToken();
 		saveToken(value);
 		const data = await getEvents(value);
-		if (data !== undefined) onEventsSynced?.(data);
+		if (data !== undefined) {
+			onEventsSynced?.(data);
+			showExport = true;
+		}
 		loading = false;
 	};
 
@@ -63,4 +69,14 @@
 	>
 		{buttonText()}
 	</button>
+	{#if showExport}
+		<button
+			type="button"
+			class="rounded-lg b-2 b-solid b-zinc-950 bg-white px-4 py-2 text-sm font-medium whitespace-nowrap text-zinc-950 shadow-sm transition hover:bg-zinc-100 disabled:cursor-not-allowed disabled:b-zinc-400 disabled:text-zinc-400"
+			disabled={loading}
+			onclick={() => onExport?.()}
+		>
+			导出
+		</button>
+	{/if}
 </section>
