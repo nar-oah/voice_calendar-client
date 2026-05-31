@@ -16,7 +16,7 @@
 	} = $props();
 </script>
 
-<div class="rounded-lg b-solid b-3 b-black bg-red p-5">
+<div class="rounded-lg b-solid b-3 b-black bg-red-500 p-5">
 	<div class="flex flex-wrap items-center gap-3">
 		<button
 			type="button"
@@ -32,7 +32,7 @@
 			disabled={creating}
 			onclick={onCreate}
 		>
-			识别日程
+			发送需求
 		</button>
 		<span class="text-sm text-black">{status}</span>
 	</div>
