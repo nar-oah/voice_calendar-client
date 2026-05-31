@@ -34,22 +34,22 @@
 		await addReminder(data.title, data.start_at);
 	}
 	async function handleCreate(event: Event): Promise<void> {
+		pendingEvent = null;
 		const data = await addEvents(token, event);
 		if (data) await addCalendar(data);
-		pendingEvent = null;
 	}
 	async function handleDelete(id: number): Promise<void> {
-		calendar?.delEvent(id);
 		pendingEvent = null;
+		calendar?.delEvent(id);
 		await delEvents(token, id);
 	}
 	function handleRead(time: Time): void {
+		pendingEvent = null;
 		function get_pd(t: Time): Temporal.PlainDate {
 			const pad = (value: number): string => String(value).padStart(2, '0');
 			return Temporal.PlainDate.from(`${t.year}-${pad(t.month)}-${pad(t.day)}`);
 		}
 		calendar?.readEvent(get_pd(time));
-		pendingEvent = null;
 	}
 	async function handleEventsSynced(data: StoredEvent[]): Promise<void> {
 		data.map(async (event: StoredEvent) => await addCalendar(event));
