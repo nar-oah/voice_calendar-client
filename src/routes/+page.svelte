@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Calendar from '$lib/calendar/Calendar.svelte';
-	import ScheduleConfirm from '$lib/ScheduleConfirm.svelte';
+	import ScheduleConfirm from '$lib/confrim/ScheduleConfirm.svelte';
 	import SpeechText from '$lib/speech-text/SpeechText.svelte';
 	import SyncPanel from '$lib/sync/SyncPanel.svelte';
 	import type { components } from '$lib/api/schema';
