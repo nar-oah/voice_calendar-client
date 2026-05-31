@@ -148,7 +148,7 @@
 						>
 							<option value="create">新建</option>
 							<option value="delete">删除</option>
-							<option value="update">查看</option>
+							<option value="read">查看</option>
 						</select>
 					</label>
 
