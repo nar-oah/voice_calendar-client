@@ -6,6 +6,7 @@
 	import type { components } from '$lib/api/schema';
 	import type { CalendarEventExternal } from '@schedule-x/calendar';
 	import { addEvents, delEvents } from '$lib/api/event';
+	import { addReminder } from '$lib/api/remind';
 
 	type Event = components['schemas']['Event'];
 	type Time = components['schemas']['Time'];
@@ -28,9 +29,13 @@
 			location: data.location ? data.location : undefined
 		};
 	}
+	async function addCalendar(data: StoredEvent): Promise<void> {
+		calendar?.addEvent(getCalendarEvent(data));
+		await addReminder(data.title, data.start_at);
+	}
 	async function handleCreate(event: Event): Promise<void> {
 		const data = await addEvents(token, event);
-		if (data) calendar?.addEvent(getCalendarEvent(data));
+		data && (await addCalendar(data));
 		pendingEvent = null;
 	}
 	async function handleDelete(id: number): Promise<void> {
@@ -46,8 +51,8 @@
 		calendar?.readEvent(get_pd(time));
 		pendingEvent = null;
 	}
-	function handleEventsSynced(data: StoredEvent[]): void {
-		data.map((event: StoredEvent) => calendar?.addEvent(getCalendarEvent(event)));
+	async function handleEventsSynced(data: StoredEvent[]): Promise<void> {
+		data.map(async (event: StoredEvent) => await addCalendar(event));
 	}
 </script>
 
