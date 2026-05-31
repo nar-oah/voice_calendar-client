@@ -57,3 +57,23 @@ export async function delEvents(token: string, id: number): Promise<void> {
 		}
 	});
 }
+export async function getIcs(token: string, pd: Temporal.PlainDate): Promise<void> {
+	const date = pd.toString();
+	const { data, error } = await api.POST('/export', {
+		params: {
+			query: {
+				token,
+				date
+			}
+		},
+		parseAs: 'blob'
+	});
+	if (!error && data) {
+		const url = URL.createObjectURL(data);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = 'voice_calendar.ics';
+		a.click();
+		URL.revokeObjectURL(url);
+	}
+}

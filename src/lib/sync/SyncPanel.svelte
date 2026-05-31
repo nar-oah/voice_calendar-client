@@ -7,16 +7,18 @@
 
 	let {
 		token = $bindable(''),
-		onEventsSynced
+		onEventsSynced,
+		onExport
 	}: {
 		token?: string;
 		onEventsSynced?: (data: StoredEvent[]) => void;
+		onExport?: () => void;
 	} = $props();
 </script>
 
 <main class="px-5 text-zinc-950">
 	<section class="flex flex-col gap-4">
-		<TokenSync bind:token {onEventsSynced} />
+		<TokenSync bind:token {onEventsSynced} {onExport} />
 		<TokenAccessInfo {token} />
 	</section>
 </main>
