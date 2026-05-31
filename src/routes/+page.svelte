@@ -57,7 +57,7 @@
 </script>
 
 <main class="flex w-full gap-8">
-	<section class="flex flex-1 flex-col gap-4">
+	<section class="flex flex-1 flex-col gap-2">
 		<SpeechText {token} onEventRecognized={(data) => (pendingEvent = data)} />
 		<SyncPanel bind:token onEventsSynced={handleEventsSynced} />
 	</section>

@@ -144,7 +144,7 @@
 	});
 </script>
 
-<main class="px-5 py-10 text-zinc-950">
+<main class="px-5 py-8 text-zinc-950">
 	<section class="flex flex-col gap-6">
 		<SpeechHeader />
 		<SpeechControls

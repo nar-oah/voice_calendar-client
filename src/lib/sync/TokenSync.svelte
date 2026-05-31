@@ -17,7 +17,7 @@
 	let loading = $state(false);
 
 	const currentToken = () => token.trim();
-	const buttonText = () => (token.trim() ? '同步' : '获取token');
+	const buttonText = () => (token.trim() ? '同步' : '获取Token');
 
 	const saveToken = (value: string) => {
 		token = value;
@@ -52,7 +52,7 @@
 	<input
 		class="min-w-0 flex-1 rounded-md b-solid b-3 b-black bg-white px-5 py-2 text-sm text-zinc-900 outline-none placeholder:text-zinc-400"
 		type="text"
-		placeholder="输入token以同步"
+		placeholder="输入Token以同步"
 		bind:value={token}
 	/>
 	<button
