@@ -2,10 +2,11 @@
 	import Calendar from '$lib/calendar/Calendar.svelte';
 	import ScheduleConfirm from '$lib/ScheduleConfirm.svelte';
 	import SpeechText from '$lib/speech-text/SpeechText.svelte';
-	import TokenSync from '$lib/sync/TokenSync.svelte';
+	import SyncPanel from '$lib/sync/SyncPanel.svelte';
 	import type { components } from '$lib/api/schema';
 	import type { CalendarEventExternal } from '@schedule-x/calendar';
 	import { addEvents, delEvents } from '$lib/api/event';
+	import { addReminder } from '$lib/api/remind';
 
 	type Event = components['schemas']['Event'];
 	type Time = components['schemas']['Time'];
@@ -28,9 +29,13 @@
 			location: data.location ? data.location : undefined
 		};
 	}
+	async function addCalendar(data: StoredEvent): Promise<void> {
+		calendar?.addEvent(getCalendarEvent(data));
+		await addReminder(data.title, data.start_at);
+	}
 	async function handleCreate(event: Event): Promise<void> {
 		const data = await addEvents(token, event);
-		if (data) calendar?.addEvent(getCalendarEvent(data));
+		if (data) await addCalendar(data);
 		pendingEvent = null;
 	}
 	async function handleDelete(id: number): Promise<void> {
@@ -46,15 +51,15 @@
 		calendar?.readEvent(get_pd(time));
 		pendingEvent = null;
 	}
-	function handleEventsSynced(data: StoredEvent[]): void {
-		data.map((event: StoredEvent) => calendar?.addEvent(getCalendarEvent(event)));
+	async function handleEventsSynced(data: StoredEvent[]): Promise<void> {
+		data.map(async (event: StoredEvent) => await addCalendar(event));
 	}
 </script>
 
 <main class="flex w-full gap-8">
-	<section class="flex flex-1 flex-col gap-4">
+	<section class="flex flex-1 flex-col gap-2">
 		<SpeechText {token} onEventRecognized={(data) => (pendingEvent = data)} />
-		<TokenSync bind:token onEventsSynced={handleEventsSynced} />
+		<SyncPanel bind:token onEventsSynced={handleEventsSynced} />
 	</section>
 	<section class="flex-1">
 		<Calendar bind:this={calendar} />

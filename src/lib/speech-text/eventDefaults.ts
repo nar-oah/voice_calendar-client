@@ -19,7 +19,7 @@ export const getEmptyEvent = (): ScheduleEvent => {
 	return {
 		action: 'create',
 		id: 0,
-		title: '十分钟后提醒我喝水',
+		title: '喝水',
 		start: now,
 		end: { ...now, minute: now.minute + 5 },
 		location: null,
