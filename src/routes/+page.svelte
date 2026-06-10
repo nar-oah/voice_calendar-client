@@ -66,7 +66,7 @@
 		<SyncPanel bind:token onEventsSynced={handleEventsSynced} onExport={handleExport} />
 	</section>
 	<section class="flex-1">
-		<Calendar bind:this={calendar} />
+		<Calendar bind:this={calendar} onDelete={handleDelete} />
 	</section>
 </main>
 

@@ -4,18 +4,35 @@
 	import type { CalendarApp, CalendarEventExternal } from '@schedule-x/calendar';
 	import '@schedule-x/theme-default/dist/index.css';
 	import 'temporal-polyfill/global';
-	import { onMount } from 'svelte';
+	import { onMount, setContext } from 'svelte';
 	import '@schedule-x/theme-shadcn/dist/index.css';
 	import { createCurrentTimePlugin } from '@schedule-x/current-time';
 	import { createEventsServicePlugin } from '@schedule-x/events-service';
 	import { createEventModalPlugin } from '@schedule-x/event-modal';
 	import { createCalendarControlsPlugin } from '@schedule-x/calendar-controls';
+	import CalendarEventModal from '$lib/calendar/CalendarEventModal.svelte';
 	import WeekGridDate from '$lib/calendar/WeekGridDate.svelte';
+	import {
+		calendarEventModalContextKey,
+		type CalendarEventModalContext
+	} from '$lib/calendar/calendarEventModalContext';
 
 	let calendarApp = $state<CalendarApp>();
+	let {
+		onDelete
+	}: {
+		onDelete?: (id: number) => void | Promise<void>;
+	} = $props();
 	const eventsService = createEventsServicePlugin();
 	const calendarControls = createCalendarControlsPlugin();
 	const eventModal = createEventModalPlugin();
+	setContext<CalendarEventModalContext>(calendarEventModalContextKey, {
+		close: () => eventModal.close(),
+		deleteEvent: (id) => {
+			eventModal.close();
+			void onDelete?.(id);
+		}
+	});
 	export function addEvent(event: CalendarEventExternal): void {
 		eventsService.add(event);
 	}
@@ -49,7 +66,7 @@
 
 <main>
 	{#if calendarApp}
-		<ScheduleXCalendar {calendarApp} weekGridDate={WeekGridDate} />
+		<ScheduleXCalendar {calendarApp} eventModal={CalendarEventModal} weekGridDate={WeekGridDate} />
 	{/if}
 </main>
 
@@ -58,6 +75,10 @@
 		border: none;
 		border-radius: 0;
 		box-shadow: none;
+	}
+	:global(.sx__event-modal) {
+		background: transparent !important;
+		box-shadow: none !important;
 	}
 	:global(.sx__week-header) {
 		display: none;
