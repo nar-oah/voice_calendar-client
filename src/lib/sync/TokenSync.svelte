@@ -50,7 +50,7 @@
 
 	onMount(() => {
 		if (!token) token = localStorage.getItem(tokenStorageKey) ?? '';
-		if (token) handleClick();
+		handleClick();
 	});
 </script>
 
