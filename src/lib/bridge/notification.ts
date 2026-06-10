@@ -9,7 +9,8 @@ const getBrowserPermission = async (): Promise<NotificationPermission | 'unsuppo
 };
 
 const getTauriPermission = async (): Promise<NotificationPermission> => {
-	const { isPermissionGranted, requestPermission } = await import('@tauri-apps/plugin-notification');
+	const { isPermissionGranted, requestPermission } =
+		await import('@tauri-apps/plugin-notification');
 	if (await isPermissionGranted()) return 'granted';
 	return requestPermission();
 };

@@ -4,7 +4,9 @@ const storePath = 'voice-calendar.json';
 let storePromise: Promise<import('@tauri-apps/plugin-store').LazyStore> | null = null;
 
 const getTauriStore = async () => {
-	storePromise ??= import('@tauri-apps/plugin-store').then(({ LazyStore }) => new LazyStore(storePath));
+	storePromise ??= import('@tauri-apps/plugin-store').then(
+		({ LazyStore }) => new LazyStore(storePath)
+	);
 	return storePromise;
 };
 
