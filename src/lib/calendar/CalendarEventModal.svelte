@@ -44,10 +44,7 @@
 	<div
 		class="max-h-[calc(100vh-2rem)] overflow-y-auto rounded-lg b-3 b-solid b-black bg-white p-5 text-zinc-950"
 	>
-		<div class="grid gap-2">
-			<span class="w-fit rounded-md bg-red-600 px-3 py-1 text-sm font-medium text-white">日程</span>
-			<h2 class="text-xl font-semibold">{title}</h2>
-		</div>
+		<h2 class="text-xl font-semibold">{title}</h2>
 
 		<dl class="mt-5 grid gap-3 text-sm">
 			<div class="grid grid-cols-[4rem_1fr] gap-3">
