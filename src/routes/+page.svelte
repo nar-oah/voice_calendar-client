@@ -13,6 +13,7 @@
 	type StoredEvent = components['schemas']['StoredEvent'];
 	let pendingEvent = $state<Event | null>(null);
 	let calendar = $state<Calendar>();
+	let showCalendar = $state(false);
 	let token = $state('');
 
 	function getCalendarEvent(data: StoredEvent): CalendarEventExternal {
@@ -60,12 +61,21 @@
 	}
 </script>
 
-<main class="flex w-full gap-8">
+<main class="flex w-full flex-col gap-4 lg:flex-row lg:gap-8">
 	<section class="flex flex-1 flex-col gap-2">
 		<SpeechText {token} onEventRecognized={(data) => (pendingEvent = data)} />
 		<SyncPanel bind:token onEventsSynced={handleEventsSynced} onExport={handleExport} />
 	</section>
-	<section class="flex-1">
+	<button
+		type="button"
+		class="mx-5 self-start rounded-lg bg-zinc-950 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800 lg:hidden"
+		aria-controls="calendar-panel"
+		aria-expanded={showCalendar}
+		onclick={() => (showCalendar = !showCalendar)}
+	>
+		{showCalendar ? '隐藏日历' : '显示日历'}
+	</button>
+	<section id="calendar-panel" class={`flex-1 ${showCalendar ? 'block' : 'hidden'} lg:block`}>
 		<Calendar bind:this={calendar} onDelete={handleDelete} />
 	</section>
 </main>
