@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { getEvent } from '$lib/api/event';
+	import { createSpeechBridge, type SpeechBridge } from '$lib/bridge/speech';
 	import { getEmptyEvent, type ScheduleEvent } from '$lib/speech-text/eventDefaults';
 	import SpeechControls from '$lib/speech-text/SpeechControls.svelte';
 	import SpeechHeader from '$lib/speech-text/SpeechHeader.svelte';
@@ -15,7 +16,7 @@
 	let transcript = $state('');
 	let status = $state('正在检测浏览器支持...');
 	let creating = $state(false);
-	let recognition: SpeechRecognition | null = null;
+	let recognition: SpeechBridge | null = null;
 	let createOnEnd = false;
 	let committedTranscript = '';
 
@@ -39,27 +40,27 @@
 		}
 	};
 
-	const startRecognition = () => {
+	const startRecognition = async () => {
 		if (!recognition || listening || creating) return;
 		createOnEnd = false;
 		committedTranscript = transcript;
 		listening = true;
 		status = '正在聆听...';
-		recognition.start();
+		await recognition.start();
 	};
 
-	const stopRecognition = () => {
+	const stopRecognition = async () => {
 		if (!recognition || !listening) return;
 		createOnEnd = false;
 		status = '正在停止...';
-		recognition.stop();
+		await recognition.stop();
 	};
 
 	const toggleRecognition = () => {
 		if (listening) {
-			stopRecognition();
+			void stopRecognition();
 		} else {
-			startRecognition();
+			void startRecognition();
 		}
 	};
 
@@ -70,7 +71,7 @@
 		if (recognition && listening) {
 			createOnEnd = true;
 			status = '正在整理识别内容...';
-			recognition.stop();
+			await recognition.stop();
 			return;
 		}
 
@@ -79,67 +80,55 @@
 	};
 
 	onMount(() => {
-		const SpeechRecognitionConstructor = window.SpeechRecognition || window.webkitSpeechRecognition;
-		if (!SpeechRecognitionConstructor) {
-			status = '当前浏览器不支持 SpeechRecognition。';
-			return;
-		}
+		let mounted = true;
 
-		supported = true;
-		status = '点击开始后说话。';
+		void createSpeechBridge({
+			onStart: () => {
+				listening = true;
+				status = '正在聆听...';
+			},
+			onEnd: async () => {
+				listening = false;
+				committedTranscript = transcript;
 
-		recognition = new SpeechRecognitionConstructor();
-		recognition.lang = 'zh-CN';
-		recognition.continuous = true;
-		recognition.interimResults = true;
+				if (createOnEnd) {
+					await submitSchedule();
+					createOnEnd = false;
+					creating = false;
+					return;
+				}
 
-		recognition.onstart = () => {
-			listening = true;
-			status = '正在聆听...';
-		};
-
-		recognition.onend = async () => {
-			listening = false;
-			committedTranscript = transcript;
-
-			if (createOnEnd) {
-				await submitSchedule();
-				createOnEnd = false;
+				status = transcript ? '识别已停止，可继续开始或新建日程。' : '等待开始。';
+			},
+			onError: (error) => {
+				listening = false;
 				creating = false;
+				createOnEnd = false;
+				status = `识别失败：${error}`;
+			},
+			onText: ({ finalText, interimText }) => {
+				committedTranscript += finalText;
+				transcript = `${committedTranscript}${interimText}`;
+			}
+		}).then((result) => {
+			if (!mounted) {
+				if (result.supported) void result.bridge.destroy();
 				return;
 			}
 
-			status = transcript ? '识别已停止，可继续开始或新建日程。' : '等待开始。';
-		};
-
-		recognition.onerror = (event) => {
-			listening = false;
-			creating = false;
-			createOnEnd = false;
-			status = `识别失败：${event.error}`;
-		};
-
-		recognition.onresult = (event) => {
-			let finalText = '';
-			let interimText = '';
-
-			for (let index = event.resultIndex; index < event.results.length; index += 1) {
-				const result = event.results[index];
-				const text = result[0].transcript;
-
-				if (result.isFinal) {
-					finalText += text;
-				} else {
-					interimText += text;
-				}
+			if (!result.supported) {
+				status = result.message;
+				return;
 			}
 
-			committedTranscript += finalText;
-			transcript = `${committedTranscript}${interimText}`;
-		};
+			recognition = result.bridge;
+			supported = true;
+			status = '点击开始后说话。';
+		});
 
 		return () => {
-			recognition?.abort();
+			mounted = false;
+			void recognition?.destroy();
 		};
 	});
 </script>

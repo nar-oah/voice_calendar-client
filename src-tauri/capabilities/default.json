@@ -9,6 +9,7 @@
     "core:default",
     "http:default",
     "notification:default",
-    "store:default"
+    "store:default",
+    "stt:default"
   ]
 }
