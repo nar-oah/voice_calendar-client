@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "identifier": "top.naroah.voicecalendar",
   "build": {
-    "frontendDist": "..",
+    "frontendDist": "../build",
     "devUrl": "http://localhost:5173",
     "beforeDevCommand": "pnpm dev:tauri",
     "beforeBuildCommand": "pnpm build:tauri"
