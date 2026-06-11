@@ -35,6 +35,9 @@ importers:
       '@schedule-x/theme-shadcn':
         specifier: ^4.6.0
         version: 4.6.0
+      '@tauri-apps/api':
+        specifier: ~2.11.0
+        version: 2.11.0
       '@tauri-apps/plugin-http':
         specifier: ~2.5.9
         version: 2.5.9
