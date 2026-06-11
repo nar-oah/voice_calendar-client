@@ -5,7 +5,10 @@
 	"windows": ["main"],
 	"permissions": [
 		"core:default",
-		"http:default",
+		{
+			"identifier": "http:default",
+			"allow": [{ "url": "https://aws.naroah.top/calendar/*" }]
+		},
 		"notification:default",
 		"store:default",
 		"stt:default"
