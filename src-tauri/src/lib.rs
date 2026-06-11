@@ -34,7 +34,9 @@ fn copy_bundled_whisper_models<R: tauri::Runtime>(
 fn is_whisper_resource(path: &Path) -> bool {
     path.file_name()
         .and_then(|name| name.to_str())
-        .is_some_and(|name| name == "active.txt" || name.starts_with("ggml-") && name.ends_with(".bin"))
+        .is_some_and(|name| {
+            name == "active.txt" || name.starts_with("ggml-") && name.ends_with(".bin")
+        })
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
