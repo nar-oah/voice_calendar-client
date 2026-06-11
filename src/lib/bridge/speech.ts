@@ -25,6 +25,14 @@ export type SpeechBridgeResult =
 
 type TauriListener = (() => void) | { unregister: () => Promise<void> };
 
+const tauriSttUnavailableMessage = (reason?: string): string => {
+	if (reason?.toLowerCase().includes('model')) {
+		return 'Tauri STT 不可用：未安装 Whisper 模型。请先将 GGML 模型放入 appDataDir/whisper-models。';
+	}
+
+	return `Tauri STT 不可用${reason ? `：${reason}` : ''}`;
+};
+
 const removeTauriListener = async (listener: TauriListener): Promise<void> => {
 	if (typeof listener === 'function') {
 		listener();
@@ -90,8 +98,7 @@ const createTauriSpeechBridge = async (events: SpeechBridgeEvents): Promise<Spee
 	} = await import('tauri-plugin-stt-api');
 	const availability = await isAvailable();
 	if (!availability.available) {
-		const reason = availability.reason ? `：${availability.reason}` : '';
-		return { supported: false, message: `Tauri STT 不可用${reason}` };
+		return { supported: false, message: tauriSttUnavailableMessage(availability.reason) };
 	}
 
 	let listening = false;
