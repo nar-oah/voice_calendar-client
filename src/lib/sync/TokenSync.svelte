@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { getEvents, getToken } from '$lib/api/event';
+	import { getStorageItem, setStorageItem } from '$lib/bridge/storage';
 	import type { components } from '$lib/api/schema';
 
 	type StoredEvent = components['schemas']['StoredEvent'];
@@ -22,9 +23,9 @@
 	const currentToken = () => token.trim();
 	const buttonText = () => (token.trim() ? '同步' : '获取Token');
 
-	const saveToken = (value: string) => {
+	const saveToken = async (value: string) => {
 		token = value;
-		localStorage.setItem(tokenStorageKey, value);
+		await setStorageItem(tokenStorageKey, value);
 	};
 
 	const handleClick = async () => {
@@ -33,13 +34,13 @@
 
 		if (!currentToken()) {
 			const data = await getToken();
-			if (data !== undefined) saveToken(data);
+			if (data !== undefined) await saveToken(data);
 			loading = false;
 			return;
 		}
 
 		const value = currentToken();
-		saveToken(value);
+		await saveToken(value);
 		const data = await getEvents(value);
 		if (data !== undefined) {
 			onEventsSynced?.(data);
@@ -49,8 +50,10 @@
 	};
 
 	onMount(() => {
-		if (!token) token = localStorage.getItem(tokenStorageKey) ?? '';
-		handleClick();
+		void (async () => {
+			if (!token) token = (await getStorageItem(tokenStorageKey)) ?? '';
+			await handleClick();
+		})();
 	});
 </script>
 

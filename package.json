@@ -6,6 +6,10 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "wrangler types --check && vite build",
+		"dev:tauri": "TAURI_BUILD=true vite dev",
+		"build:tauri": "TAURI_BUILD=true vite build",
+		"tauri:dev": "pnpm tauri dev",
+		"tauri:build": "pnpm tauri build",
 		"preview": "wrangler pages dev .svelte-kit/cloudflare --port 4173",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "wrangler types --check && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -18,8 +22,10 @@
 		"@eslint/compat": "^2.0.4",
 		"@eslint/js": "^10.0.1",
 		"@sveltejs/adapter-cloudflare": "^7.2.8",
+		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/kit": "^2.57.0",
 		"@sveltejs/vite-plugin-svelte": "^7.0.0",
+		"@tauri-apps/cli": "^2.11.2",
 		"@types/dom-speech-recognition": "^0.0.11",
 		"@types/node": "^24",
 		"@unocss/extractor-svelte": "^66.7.0",
@@ -48,8 +54,13 @@
 		"@schedule-x/svelte": "^3.0.0",
 		"@schedule-x/theme-default": "^4.6.0",
 		"@schedule-x/theme-shadcn": "^4.6.0",
+		"@tauri-apps/api": "~2.11.0",
+		"@tauri-apps/plugin-http": "~2.5.9",
+		"@tauri-apps/plugin-notification": "~2.3.3",
+		"@tauri-apps/plugin-store": "~2.4.3",
 		"openapi-fetch": "^0.17.0",
 		"preact": "^10.29.2",
+		"tauri-plugin-stt-api": "^0.2.0",
 		"temporal-polyfill": "^0.3.2"
 	}
 }

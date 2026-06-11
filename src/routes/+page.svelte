@@ -1,8 +1,10 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import Calendar from '$lib/calendar/Calendar.svelte';
 	import ScheduleConfirm from '$lib/confrim/ScheduleConfirm.svelte';
 	import SpeechText from '$lib/speech-text/SpeechText.svelte';
 	import SyncPanel from '$lib/sync/SyncPanel.svelte';
+	import { isTauriRuntime } from '$lib/bridge/runtime';
 	import type { components } from '$lib/api/schema';
 	import type { CalendarEventExternal } from '@schedule-x/calendar';
 	import { addEvents, delEvents, getIcs } from '$lib/api/event';
@@ -14,6 +16,7 @@
 	let pendingEvent = $state<Event | null>(null);
 	let calendar = $state<Calendar>();
 	let showCalendar = $state(false);
+	let calendarEnabled = $state(false);
 	let token = $state('');
 
 	function getCalendarEvent(data: StoredEvent): CalendarEventExternal {
@@ -59,6 +62,10 @@
 		const date = calendar?.get_date();
 		if (date) getIcs(token, date);
 	}
+	onMount(() => {
+		showCalendar = isTauriRuntime();
+		calendarEnabled = true;
+	});
 </script>
 
 <main class="flex w-full flex-col gap-4 lg:flex-row lg:gap-8">
@@ -76,7 +83,9 @@
 		{showCalendar ? '隐藏日历' : '显示日历'}
 	</button>
 	<section id="calendar-panel" class={`flex-1 ${showCalendar ? 'block' : 'hidden'} lg:block`}>
-		<Calendar bind:this={calendar} onDelete={handleDelete} />
+		{#if calendarEnabled}
+			<Calendar bind:this={calendar} onDelete={handleDelete} />
+		{/if}
 	</section>
 </main>
 
